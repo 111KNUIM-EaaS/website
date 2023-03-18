@@ -1,11 +1,11 @@
 import { Form, Nav, Navbar } from "react-bootstrap"
-import { List, QuestionCircle, Grid3x3GapFill, PersonFill} from "react-bootstrap-icons"
+import { List, QuestionCircle, Grid3x3GapFill} from "react-bootstrap-icons"
 
 import 'bootstrap/dist/css/bootstrap.min.css';;
 
 let icons =  [
     {id: "QuestionCircle", svg: <QuestionCircle size={30}/>, href: "/information"},
-    {id: "Grid3x3GapFill", svg: <Grid3x3GapFill size={30}/>, href: "/content"}
+    {id: "Grid3x3GapFill", svg: <Grid3x3GapFill size={30}/>, href: "/home"}
 ]
 
 function Header() {    
