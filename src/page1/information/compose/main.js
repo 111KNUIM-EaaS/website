@@ -1,5 +1,8 @@
 import { Container, Row, Col } from "react-bootstrap"
 import 'bootstrap/dist/css/bootstrap.min.css';
+
+import React, { useEffect, useState } from 'react';
+
 function Main() { 
     return (
         <Container fluid className="d-flex flex-fill"> 
@@ -7,6 +10,7 @@ function Main() {
                 <Col md={4}>Placeholder column 1</Col>
                 <Col md={4}>
                     <div>
+                        {/* {data ? <span>{data}</span> : <span>Loading...</span>} */}
                         Loading...
                     </div>
                 </Col>
