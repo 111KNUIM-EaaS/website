@@ -8,6 +8,11 @@ function LogOut() {
     authentication.signOut();
     window.location.href= "/";
 }
+
+function userToast() {
+     
+}
+
 const UserLogin = ({ user }) => {
     return (
         <div>
