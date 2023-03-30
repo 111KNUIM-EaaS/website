@@ -1,7 +1,11 @@
+import { useState, useEffect } from "react";
 import { Form, Nav, Navbar } from "react-bootstrap"
 import { List, QuestionCircle, Grid3x3GapFill, PersonFill} from "react-bootstrap-icons"
-
+import { authentication } from "./firebase";
+import { onAuthStateChanged } from "firebase/auth";
+import UserLogin from "../page1/login/compose/userLogin";
 import 'bootstrap/dist/css/bootstrap.min.css';;
+
 
 let icons =  [
     {id: "QuestionCircle", svg: <QuestionCircle size={30}/>, href: "/information"},
@@ -11,6 +15,13 @@ let icons =  [
 
 
 function Header() {    
+    const [user, setUser] = useState(null);
+    useEffect(() => {
+        onAuthStateChanged(authentication, (user) => {
+            setUser(user);
+        }) 
+    }, [])
+
     return (
         <Navbar style={{ height: "10vh", backgroundColor: 'rgb(238, 242, 249)' }}>
             <Nav className="p-4 d-none d-md-block">
@@ -39,9 +50,9 @@ function Header() {
                         {icon.svg}
                     </Nav.Link>
                 ))}
-                <Nav.Link>
-                    <PersonFill size={30} /> 
-                </Nav.Link>
+                
+                { user ? <Nav.Link><UserLogin user={user} /> </Nav.Link> : <Nav.Link  href="/"><PersonFill  size={30} /></Nav.Link> }
+                
             </Nav>
         </Navbar>
     )

@@ -1,7 +1,8 @@
 import { Card, Form, Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
+import { signInWithGoogle } from '../../../compose/firebase';
 function LoginCard() {
+    
     return (
         <Card className="mx-4" style={{ width: '40vw' }}>
             <Card.Body>
@@ -25,6 +26,7 @@ function LoginCard() {
                         Submit
                     </Button>
                 </Form>
+                <Button className='mt-2' onClick={signInWithGoogle}>google login</Button> 
             </Card.Body>
         </Card>
     )
