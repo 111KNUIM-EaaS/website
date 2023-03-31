@@ -4,8 +4,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 function Sidebar() {
     const linkList = [ 
-        {href: "/home", svg: <HouseFill size={30} className='pb-1' />, text: "Home"},
-        {href: "/link1", svg: <Clipboard2Plus size={30} className='pb-1' />, text: "link1"},
+        {href: "/home/main", svg: <HouseFill size={30} className='pb-1' />, text: "Home"},
+        {href: "/home/status", svg: <Clipboard2Plus size={30} className='pb-1' />, text: "Status"},
         {href: "/link2", svg: <FuelPump size={30} className='pb-1'/>, text: "link2"}
     ];
     return (

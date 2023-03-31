@@ -2,15 +2,22 @@ import { Container, Row, Col } from "react-bootstrap"
 import 'bootstrap/dist/css/bootstrap.min.css';
 function Main() { 
     return (
-        <Container fluid className="d-flex flex-fill"> 
-            <Row className="flex-fill align-items-center">
-                <Col md={4}>Placeholder column 1</Col>
-                <Col md={4}>
-                    <div>
-                        Loading...
-                    </div>
+        <Container fluid className="text-center"> 
+            <Row className="h-50">
+                <Col md={6} className="pt-4">
+                    <h1>機器資訊</h1>
                 </Col>
-                <Col md={4}>Placeholder column 2</Col>
+                <Col md={6} className="pt-4">
+                    <h1>租借使用者</h1>
+                </Col>
+            </Row>
+            <Row className="h-50">
+                <Col md={6} className="pt-4">
+                    <h1>使用狀態</h1>
+                </Col>
+                <Col md={6} className="pt-4">
+                    <h1>機器控管</h1>
+                </Col>
             </Row>
         </Container>   
     )
