@@ -19,8 +19,19 @@ function Header() {
     useEffect(() => {
         onAuthStateChanged(authentication, (user) => {
             setUser(user);
-        }) 
-    }, [])
+            console.log("🚀 ~ file: header.js:33 ~ onAuthStateChanged ~ user:", user);
+
+            if( user === null) {
+                if(window.location.pathname !== "/") {
+                    window.location.href = "/";
+                }
+            } else {
+                if(window.location.pathname === "/") {
+                    window.location.href = "/home";
+                }
+            }
+        });
+    }, []);
 
     return (
         <Navbar style={{ height: "10vh", backgroundColor: 'rgb(238, 242, 249)' }}>

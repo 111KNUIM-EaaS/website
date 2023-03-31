@@ -8,31 +8,36 @@ const provider = new GoogleAuthProvider();
 
 export const signInWithGoogle = () => {
     signInWithPopup(authentication, provider) 
-        .then((result) => {
-            console.log(result);
-            console.log(result.user);
-            console.log("useruid =" , result.user.uid );
-            const useruid = result.user.uid
-            fetch('http://172.17.0.2:80/api/password/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json; charset=utf-8'
-                },
-                body: JSON.stringify({ uid: useruid }),
-                redirect: 'follow'
-            }).then(response => {
-                console.log("response:", response);
-                if (response.redirected) {
-                    window.location.href = response.url;
-                }
-            }).catch(error => {
-                console.log("error:", error);
-            });
-            window.location.href = "/home/main"
+    .then((result) => {
+        const credential = GoogleAuthProvider.credentialFromResult(result);
+        console.log("🚀 ~ file: firebase.js:13 ~ .then ~ credential:", credential);
+        const tokenResponse = result._tokenResponse;
+        console.log("🚀 ~ file: firebase.js:15 ~ .then ~ tokenResponse:", tokenResponse)
+
+        fetch('http://localhost:8000/api/users/google/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(tokenResponse)
         })
-        .catch((error) => {
-            console.log(error);
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error('Network response was not ok');
+            }
+        })
+        .then(data => {
+            console.log("🚀 ~ file: firebase.js:32 ~ .then ~ data:", data);
+        })
+        .catch(error => {
+            console.log("🚀 ~ file: firebase.js:35 ~ .then ~ error:", error);
         });
+    })
+    .catch((error) => {
+        console.log("🚀 ~ file: firebase.js:39 ~ signInWithGoogle ~ error:", error);
+    });
 };
 
 
