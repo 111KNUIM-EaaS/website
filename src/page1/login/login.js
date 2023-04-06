@@ -6,7 +6,7 @@ import './login.css'
 const Login = () => {
     return (
         <Container fluid className="login">
-            <Row style={{ height: '90vh' }}>
+            <Row style={{ height: '95vh' }}>
                 <Col className="d-flex  justify-content-center justify-content-md-end align-items-center">
                     <LoginCard />
                 </Col>

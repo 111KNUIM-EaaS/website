@@ -7,6 +7,10 @@
     background-repeat: no-repeat;
 }
 
+.logout:hover {
+    background-color: rgb(88, 91, 97);;
+}
+
 @media screen and (max-width:800px)  {
     .login { 
         background-image: url("../../compose/cleaner.jpg");
