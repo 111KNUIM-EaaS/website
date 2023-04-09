@@ -1,6 +1,6 @@
 import { Card, Form, Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { signInWithGoogle } from '../../../compose/firebase';
+import { signInWithGoogle } from '../../../compose/firebase/firebase';
 function LoginCard() {
     
     return (

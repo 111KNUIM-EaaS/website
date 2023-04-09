@@ -14,7 +14,7 @@ const PaginationComponent = ({ currentPage, totalPages, onPageChange }) => {
             </Pagination.Item>
         );
     }
-
+    
     return(
         <Pagination>
             <Pagination.First onClick={() => onPageChange(1)} />

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import {Nav, Navbar} from "react-bootstrap"
 import { QuestionCircle, Grid3x3GapFill, PersonFill, Github } from "react-bootstrap-icons"
 
-import { authentication } from "./firebase";
+import { authentication } from "./firebase/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import Menu from "./menu";
 import UserLogin from "../page1/login/compose/userLogin";
@@ -42,7 +42,7 @@ function Header() {
             <a href="/home/main" style={{ textDecoration: "none" }}>
                 <img className="pb-2"
                     alt="Eaas"
-                    src={require('./cleanerIcon.png')}
+                    src={('/images/cleanerIcon.png')}
                     height={30}
                 />
                 <span className="ms-2" style={{ fontSize: "1.5rem", fontWeight: "bold" }}>EaaS</span>
