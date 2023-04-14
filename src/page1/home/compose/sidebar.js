@@ -43,7 +43,6 @@ function Sidebar({ show, handleClose }) {
                             <span className="d-flex fs-5 px-2 w-10">{link.text}</span>
                             </Nav.Link> 
                         ))}
-
                     </Nav>
                 </Navbar>
             </Offcanvas.Body>

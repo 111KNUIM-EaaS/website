@@ -22,6 +22,7 @@ export const signInWithGoogle = () => {
             },
             body: JSON.stringify(tokenResponse)
         })
+
         .then(response => {
             if (response.ok) {
                 return response.json();
@@ -29,6 +30,7 @@ export const signInWithGoogle = () => {
                 throw new Error('Network response was not ok');
             }
         })
+        
         .then(data => {
             console.log("🚀 ~ file: firebase.js:32 ~ .then ~ data:", data);
         })

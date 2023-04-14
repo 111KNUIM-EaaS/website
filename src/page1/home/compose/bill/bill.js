@@ -2,6 +2,7 @@ import { Card, Container, Row, Col, Table } from "react-bootstrap"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../home.css';
 const Bill = () => {
+    
     const data = [
         { id: 1, machineType: 'Excavator', rentalTimes: "1:10:10", total: 1500 },
         { id: 2, machineType: 'Bulldozer', rentalTimes: "1:10:10", total: 1000 },

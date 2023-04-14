@@ -1,13 +1,11 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react'
 import {Nav, Navbar} from "react-bootstrap"
 import { QuestionCircle, Grid3x3GapFill, PersonFill, Github } from "react-bootstrap-icons"
-
 import { authentication } from "./firebase/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import Menu from "./menu";
 import UserLogin from "../page1/login/compose/userLogin";
 import 'bootstrap/dist/css/bootstrap.min.css';
-
 
 
 let icons =  [
@@ -18,7 +16,6 @@ let icons =  [
 
 function Header() {    
     const [user, setUser] = useState(null);
-
     useEffect(() => {
         onAuthStateChanged(authentication, (user) => {
             setUser(user);
