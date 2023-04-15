@@ -1,4 +1,4 @@
-FROM node:18.14.2
+FROM node:18.14.2-slim
 
 RUN npm install -g create-react-app
 
