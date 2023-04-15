@@ -23,7 +23,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           source: "${{ secrets.DOCKER_NAME }}.tar"
-          target: "/tmp/${{ secrets.DOCKER_NAME }}.tar"
+          target: "/tmp/${{ secrets.DOCKER_NAME }}"
 
       # ssh to the server and run the commands
       - name: Deploy to server
@@ -34,4 +34,4 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            docker load -i /tmp/${{ secrets.DOCKER_NAME }}.tar
+            docker load -i /tmp/${{ secrets.DOCKER_NAME }}/${{ secrets.DOCKER_NAME }}.tar
