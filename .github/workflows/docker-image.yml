@@ -16,7 +16,6 @@ jobs:
           DOCKER_TAG: $(date +%s)
         run: |
           TAG=$(date +%s)
-          cd reactjs
           docker build . --file Dockerfile --tag $DOCKER_NAME:$DOCKER_TAG
           docker save $DOCKER_NAME:$DOCKER_TAG > $DOCKER_NAME.tar
 
@@ -26,7 +25,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_KEY }}
-          source: "reactjs/${{ secrets.DOCKER_NAME }}.tar"
+          source: "${{ secrets.DOCKER_NAME }}.tar"
           target: "/tmp/${{ secrets.DOCKER_NAME }}.tar"
 
       # ssh to the server and run the commands
