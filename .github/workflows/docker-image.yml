@@ -11,8 +11,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Build the ReactJS Docker image
+        env:
+          TAG: ${{ github.sha }}
         run: |
-          TAG=$(date +%s)
           docker build . --file Dockerfile --tag ${{ secrets.DOCKER_NAME }}:${TAG}
           docker save ${{ secrets.DOCKER_NAME }}:${TAG} > ${{ secrets.DOCKER_NAME }}.tar
 
@@ -35,3 +36,5 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             docker load -i /tmp/${{ secrets.DOCKER_NAME }}/${{ secrets.DOCKER_NAME }}.tar
+            # SET latest tag
+            docker tag ${{ secrets.DOCKER_NAME }}:${TAG} ${{ secrets.DOCKER_NAME }}:latest
