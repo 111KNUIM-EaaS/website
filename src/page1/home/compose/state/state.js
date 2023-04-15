@@ -55,7 +55,8 @@ const State = () => {
 
     return (
         <Container fluid>
-            {machineList.map((state, index) => ( 
+            {machineList.length >= 1 ? (
+                currentItems.map((state, index) => ( 
                 <Row className="mt-5 pt-5 mx-3" key={index}>
                     <Col>
                         <Card className="fs-2">
@@ -70,7 +71,14 @@ const State = () => {
                         </Card>
                     </Col>
                 </Row>
-            ))}
+                 )) 
+            ) : (
+                <div className="fs-2 text-center">
+                    <p className="mt-3 pt-2">尚未新增機器</p>
+                    <a href="/home/machine">新增機器</a>
+                </div>
+               
+            )}
             <Row className="justify-content-center mt-5 pt-5">
                 <Col md={4} className="d-flex justify-content-center">
                     <PaginationComponent 
@@ -80,6 +88,7 @@ const State = () => {
                     />
                 </Col>
             </Row>
+           
         </Container>
     )
 }
