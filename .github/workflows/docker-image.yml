@@ -1,0 +1,41 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "devcontainer" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build the ReactJS Docker image
+        env:
+          DOCKER_NAME: ${{ secrets.DOCKER_NAME }}
+          DOCKER_TAG: $(date +%s)
+        run: |
+          TAG=$(date +%s)
+          cd reactjs
+          docker build . --file Dockerfile --tag $DOCKER_NAME:$DOCKER_TAG
+          docker save $DOCKER_NAME:$DOCKER_TAG > $DOCKER_NAME.tar
+
+      - name: scp the ReactJS Docker image
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          source: "reactjs/${{ secrets.DOCKER_NAME }}.tar"
+          target: "/tmp/${{ secrets.DOCKER_NAME }}.tar"
+
+      # ssh to the server and run the commands
+      - name: Deploy to server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            docker load -i /tmp/${{ secrets.DOCKER_NAME }}.tar
