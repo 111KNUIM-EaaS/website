@@ -11,13 +11,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Build the ReactJS Docker image
-        env:
-          DOCKER_NAME: ${{ secrets.DOCKER_NAME }}
-          DOCKER_TAG: $(date +%s)
         run: |
           TAG=$(date +%s)
-          docker build . --file Dockerfile --tag $DOCKER_NAME:$DOCKER_TAG
-          docker save $DOCKER_NAME:$DOCKER_TAG > $DOCKER_NAME.tar
+          docker build . --file Dockerfile --tag ${{ secrets.DOCKER_NAME }}:${TAG}
+          docker save ${{ secrets.DOCKER_NAME }}:${TAG} > ${{ secrets.DOCKER_NAME }}.tar
 
       - name: scp the ReactJS Docker image
         uses: appleboy/scp-action@master
