@@ -2,14 +2,23 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "devcontainer" ]
+    branches: [ "master", "devcontainer" ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup firebaseConfig.json
+        uses: timheuer/base64-to-file@v1.2
+        with:
+          fileName: 'firebaseConfig.json'
+          fileDir: './src/compose/firebase/'
+          encodedString: ${{ secrets.FIREBASECONFIG }}
+
       - name: Build the ReactJS Docker image
         run: |
           TAG=$(date +%s)
