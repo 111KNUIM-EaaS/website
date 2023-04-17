@@ -13,9 +13,9 @@ const Machine = () => {
     
     useEffect(() => {
         onAuthStateChanged(authentication, (user) => {
-            console.log("🚀 ~ file: header.js:21 ~ onAuthStateChanged ~ user:", user)
+            console.log("🚀 ~ file: header.js:15 ~ onAuthStateChanged ~ user:", user)
             setUser(user);
-            console.log("🚀 ~ file: header.js:21 ~ onAuthStateChanged ~ user.uid:", user.uid)
+            console.log("🚀 ~ file: header.js:15 ~ onAuthStateChanged ~ user.uid:", user.uid)
             
         });
     }, []);
@@ -23,16 +23,16 @@ const Machine = () => {
     const handleBorrowTime = (type_id) => {
         const now = new Date();
         setBorrowTime(now);
-        console.log("🚀 ~ file: machine.js:13 ~ handleBorrowTime ~ now:", now);
+        console.log("🚀 ~ file: machine.js:25 ~ handleBorrowTime ~ now:", now);
         console.log(user);
         axios
             .post('http://localhost:8000/api/machines/borrow_state', { borrowTime: now, uid: user.uid, type_id: type_id})
             .then(res => {
-                console.log("🚀 ~ file: machine.js:13 ~ handleBorrowTime ~ res:", res);
+                console.log("🚀 ~ file: machine.js:30 ~ handleBorrowTime ~ res:", res);
                 
             })
             .catch(err => {
-                console.log("🚀 ~ file: machine.js:13 ~ handleBorrowTime ~ err:", err);
+                console.log("🚀 ~ file: machine.js:30 ~ handleBorrowTime ~ err:", err);
             })
         
         window.location.href = "/home/state";

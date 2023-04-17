@@ -15,19 +15,19 @@ const State = () => {
     
     useEffect(() => {
         onAuthStateChanged(authentication, (user) => {
-            console.log("🚀 ~ file: header.js:16 ~ onAuthStateChanged ~ user:", user);
+            console.log("🚀 ~ file: state.js:16 ~ onAuthStateChanged ~ user:", user);
             setUser(user);
-            console.log("🚀 ~ file: header.js:19 ~ onAuthStateChanged ~ user.uid:", user.uid);
+            console.log("🚀 ~ file: state.js:19 ~ onAuthStateChanged ~ user.uid:", user.uid);
             axios
                 .post('http://localhost:8000/api/machines/state', { uid: user.uid })
                 .then(res => {
-                    console.table("🚀 ~ file: machine.js: 23 ~ useEffect ~ res data:", res.data.data);
+                    console.table("🚀 ~ file: state.js: 23 ~ useEffect ~ res data:", res.data.data);
                     setMachineList(res.data.data);
                 })
                 .catch(err => {
-                    console.log("🚀 ~ file: machine.js:21 ~ useEffect ~ err:", err)
+                    console.log("🚀 ~ file: state.js:21 ~ useEffect ~ err:", err)
                 });
-                });
+            });
     }, [user]);
     
     const totalPages = Math.ceil(machineList.length / itemsPerPage);
