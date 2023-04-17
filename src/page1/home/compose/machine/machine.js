@@ -1,28 +1,42 @@
 import { useState, useEffect } from "react";
 import { Container, Row, Col, Card, Button } from "react-bootstrap";
 import { Link } from "react-bootstrap-icons";
+import { authentication } from "../../../../compose/firebase/firebase";
+import { onAuthStateChanged } from "firebase/auth";
 import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Machine = () => {
+    const [user, setUser] = useState(null);
     const [machineTypeList, setMachineTypeList] = useState(undefined);
     const [borrowTime, setBorrowTime] = useState([]);
+    
+    useEffect(() => {
+        onAuthStateChanged(authentication, (user) => {
+            console.log("🚀 ~ file: header.js:21 ~ onAuthStateChanged ~ user:", user)
+            setUser(user);
+            console.log("🚀 ~ file: header.js:21 ~ onAuthStateChanged ~ user.uid:", user.uid)
+            
+        });
+    }, []);
 
-    const handleBorrowTime = () => {
+    const handleBorrowTime = (type_id) => {
         const now = new Date();
         setBorrowTime(now);
         console.log("🚀 ~ file: machine.js:13 ~ handleBorrowTime ~ now:", now);
-        
+        console.log(user);
         axios
-            .post('http://localhost:8000/api/machines/borrow', { borrowTime: now })
+            .post('http://localhost:8000/api/machines/borrow_state', { borrowTime: now, uid: user.uid, type_id: type_id})
             .then(res => {
                 console.log("🚀 ~ file: machine.js:13 ~ handleBorrowTime ~ res:", res);
+                
             })
             .catch(err => {
                 console.log("🚀 ~ file: machine.js:13 ~ handleBorrowTime ~ err:", err);
             })
+        
+        window.location.href = "/home/state";
     }
-
 
     useEffect(() => {
         axios
@@ -36,10 +50,11 @@ const Machine = () => {
             });
     }, []);
 
+
     return (
         <Container fluid className="text-center"> 
             <Row className="h-100 align-items-center">
-                {machineTypeList ? (
+                {machineTypeList && machineTypeList.length > 0 ? (
                     machineTypeList.map((item, index) => (
                     <Col key={index} className="m-5 p-4" style={{ border: "0" }}>
                         <Card className="h-100">
@@ -60,7 +75,7 @@ const Machine = () => {
                                 </div>
                                 <div className="py-2">{`$${item.price}`}</div>
                                 <div className="py-2">
-                                    <Button onClick={handleBorrowTime}>選擇</Button>
+                                <Button onClick={() => handleBorrowTime(item.type_id)}>選擇</Button>
                                 </div>
                             </Card.Body>
                         </Card>

@@ -18,8 +18,8 @@ function Header() {
     const [user, setUser] = useState(null);
     useEffect(() => {
         onAuthStateChanged(authentication, (user) => {
-            setUser(user);
-            console.log("🚀 ~ file: header.js:33 ~ onAuthStateChanged ~ user:", user);
+            setUser(user);           
+            console.log("🚀 ~ file: header.js:21 ~ onAuthStateChanged ~ user:", user)
             if( user === null) {
                 if(window.location.pathname !== "/") {
                     window.location.href = "/";
@@ -30,6 +30,8 @@ function Header() {
                 }
             }
         });
+        
+       
     }, []);
 
     return (
