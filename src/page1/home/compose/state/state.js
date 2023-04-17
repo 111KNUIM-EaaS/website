@@ -46,7 +46,7 @@ const State = () => {
         console.log("🚀 ~ file: state.js:49 ~ returnMachine ~ now:", now);
         console.log("🚀 ~ file: state.js:50 ~ returnMachine ~ machines_id:", machines_id);
         axios
-        .post("http://localhost:8000/api/machines/return_time", { returnTime: now, machineID: machines_id})
+        .post("http://localhost:8000/api/machines/return_time", { returnTime: now, machineID: machines_id, uid: user.uid})
         .then(res => {
             console.log("🚀 ~ file: state.js:54 ~ returnMachine ~ res:", res);
         })

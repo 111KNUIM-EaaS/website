@@ -73,7 +73,7 @@ const Machine = () => {
                                     廣泛應用於製造、
                                     醫學、建築、教育等領域。
                                 </div>
-                                <div className="py-2">{`$${item.price}`}</div>
+                                <div className="py-2">每小時${item.price *60 *60}</div>
                                 <div className="py-2">
                                 <Button onClick={() => handleBorrowTime(item.type_id)}>選擇</Button>
                                 </div>
