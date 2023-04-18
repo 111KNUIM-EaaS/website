@@ -1,0 +1,18 @@
+.login { 
+    background: 
+        linear-gradient(290deg, #ffffff 50%, transparent 50%) center center,
+        url("/public/images/cleaner.jpg") left center / auto 100%;
+    ;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.logout:hover {
+    background-color: rgb(88, 91, 97);;
+}
+
+@media screen and (max-width:800px)  {
+    .login { 
+        background-image: url("/public//images/cleaner.jpg");
+    }
+}
