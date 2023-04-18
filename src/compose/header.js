@@ -7,7 +7,6 @@ import Menu from "./menu";
 import UserLogin from "../page1/login/compose/userLogin";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-
 let icons =  [
     {id: "QuestionCircle", svg: <QuestionCircle size={30}/>, href: "/information/book"},
     {id: "Grid3x3GapFill", svg: <Grid3x3GapFill size={30}/>, href: "/home/main"},
@@ -30,8 +29,6 @@ function Header() {
                 }
             }
         });
-        
-       
     }, []);
 
     return (

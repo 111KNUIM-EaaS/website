@@ -18,6 +18,13 @@ jobs:
           fileName: 'firebaseConfig.json'
           fileDir: './src/conf/'
           encodedString: ${{ secrets.FIREBASECONFIG }}
+      
+      - name: Setup apiConf.json
+        uses: timheuer/base64-to-file@v1.2
+        with:
+          fileName: 'apiConf.json'
+          fileDir: './src/conf/'
+          encodedString: ${{ secrets.APICONF }}
 
       - name: Build the ReactJS Docker image
         run: |

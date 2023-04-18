@@ -5,6 +5,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../home.css';
+import apiConf  from '../../../../conf/apiConf.json'
 const Bill = () => {
     const [user, setUser] = useState(null);
     const [billData, setBillData] = useState([]);
@@ -14,7 +15,7 @@ const Bill = () => {
             setUser(user);
             console.log("🚀 ~ file: bill.js:12 ~ onAuthStateChanged ~ user.uid:", user.uid);
             axios
-                .post('http://localhost:8000/api/bills/table', { uid: user.uid })
+                .post(`http://${apiConf.host}:${apiConf.port}/api/bills/table`, { uid: user.uid })
                 .then(res => {
                     console.table("🚀 ~ file: bill.js:18 ~ useEffect ~ res data:", res.data.data);
                     setBillData(res.data.data);
@@ -56,7 +57,9 @@ const Bill = () => {
 
                                         ))
                                     ) : (
-                                        <div>error</div>
+                                        <tr>
+                                            <td colSpan="5">目前沒有任何訂單</td>
+                                        </tr>
                                     )}
                                 </tbody>
                             </Table>

@@ -5,6 +5,7 @@ import { authentication } from "../../../../compose/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import apiConf from '../../../../conf/apiConf.json' 
 
 const Machine = () => {
     const [user, setUser] = useState(null);
@@ -26,7 +27,7 @@ const Machine = () => {
         console.log("🚀 ~ file: machine.js:25 ~ handleBorrowTime ~ now:", now);
         console.log(user);
         axios
-            .post('http://localhost:8000/api/machines/borrow_state', { borrowTime: now, uid: user.uid, type_id: type_id})
+            .post(`http://${apiConf.host}:${apiConf.port}/api/machines/borrow_state`, { borrowTime: now, uid: user.uid, type_id: type_id})
             .then(res => {
                 console.log("🚀 ~ file: machine.js:30 ~ handleBorrowTime ~ res:", res);
                 
@@ -40,7 +41,7 @@ const Machine = () => {
 
     useEffect(() => {
         axios
-            .get('http://localhost:8000/api/machines/list')
+            .get(`http://${apiConf.host}:${apiConf.port}/api/machines/list`)
             .then(res => {
                 console.table("🚀 ~ file: machine.js:13 ~ useEffect ~ res data:", res.data.data);
                 setMachineTypeList(res.data.data);
@@ -49,7 +50,6 @@ const Machine = () => {
                 console.log("🚀 ~ file: machine.js:21 ~ useEffect ~ err:", err)
             });
     }, []);
-
 
     return (
         <Container fluid className="text-center"> 
@@ -75,7 +75,7 @@ const Machine = () => {
                                 </div>
                                 <div className="py-2">每小時${item.price *60 *60}</div>
                                 <div className="py-2">
-                                <Button onClick={() => handleBorrowTime(item.type_id)}>選擇</Button>
+                                    <Button onClick={() => handleBorrowTime(item.type_id)}>選擇</Button>
                                 </div>
                             </Card.Body>
                         </Card>

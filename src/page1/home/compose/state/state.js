@@ -5,6 +5,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import PaginationComponent from "../../../../compose/pagination";
 import axios from "axios";
+import apiConf from '../../../../conf/apiConf.json'
 
 const State = () => {
     const [user, setUser] = useState(null);
@@ -19,7 +20,7 @@ const State = () => {
             setUser(user);
             console.log("🚀 ~ file: state.js:19 ~ onAuthStateChanged ~ user.uid:", user.uid);
             axios
-                .post('http://localhost:8000/api/machines/state', { uid: user.uid })
+                .post(`http://${apiConf.host}:${apiConf.port}/api/machines/state`, { uid: user.uid })
                 .then(res => {
                     console.table("🚀 ~ file: state.js: 23 ~ useEffect ~ res data:", res.data.data);
                     setMachineList(res.data.data);
@@ -46,7 +47,7 @@ const State = () => {
         console.log("🚀 ~ file: state.js:49 ~ returnMachine ~ now:", now);
         console.log("🚀 ~ file: state.js:50 ~ returnMachine ~ machines_id:", machines_id);
         axios
-        .post("http://localhost:8000/api/machines/return_time", { returnTime: now, machineID: machines_id, uid: user.uid})
+        .post(`http://${apiConf.host}:${apiConf.port}/api/machines/return_time`, { returnTime: now, machineID: machines_id, uid: user.uid})
         .then(res => {
             console.log("🚀 ~ file: state.js:54 ~ returnMachine ~ res:", res);
         })
