@@ -16,7 +16,7 @@ jobs:
         uses: timheuer/base64-to-file@v1.2
         with:
           fileName: 'firebaseConfig.json'
-          fileDir: './src/compose/firebase/'
+          fileDir: './src/conf/'
           encodedString: ${{ secrets.FIREBASECONFIG }}
 
       - name: Build the ReactJS Docker image

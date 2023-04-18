@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Container, Row, Col, Button, Card} from "react-bootstrap";
-import { authentication } from "../../../../compose/firebase/firebase";
+import { authentication } from "../../../../compose/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import PaginationComponent from "../../../../compose/pagination";

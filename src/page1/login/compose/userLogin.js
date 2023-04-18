@@ -3,7 +3,7 @@ import { useState } from 'react';
 import Toast from 'react-bootstrap/Toast';
 import Button from 'react-bootstrap/Button';
 import { Row, Col } from 'react-bootstrap';
-import { authentication } from '../../../compose/firebase/firebase';
+import { authentication } from '../../../compose/firebase';
 import { DoorOpen } from 'react-bootstrap-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 

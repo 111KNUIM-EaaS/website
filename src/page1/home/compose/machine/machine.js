@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Container, Row, Col, Card, Button } from "react-bootstrap";
 import { Link } from "react-bootstrap-icons";
-import { authentication } from "../../../../compose/firebase/firebase";
+import { authentication } from "../../../../compose/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.min.css';

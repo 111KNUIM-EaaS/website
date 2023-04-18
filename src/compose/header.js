@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import {Nav, Navbar} from "react-bootstrap"
 import { QuestionCircle, Grid3x3GapFill, PersonFill, Github } from "react-bootstrap-icons"
-import { authentication } from "./firebase/firebase";
+import { authentication } from "./firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import Menu from "./menu";
 import UserLogin from "../page1/login/compose/userLogin";
