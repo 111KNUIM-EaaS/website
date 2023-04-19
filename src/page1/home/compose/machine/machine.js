@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { Container, Row, Col, Card, Button } from "react-bootstrap";
-import { Link } from "react-bootstrap-icons";
 import { authentication } from "../../../../compose/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import axios from "axios";
@@ -12,6 +11,11 @@ const Machine = () => {
     const [machineTypeList, setMachineTypeList] = useState(undefined);
     const [borrowTime, setBorrowTime] = useState([]);
     
+    const imgList = [
+        {id: 1, src: "/images/PCB.png", height: 300, width: 300},
+        {id: 2, src: "/images/3D.png",  height: 300, width: 350},
+        {id: 3, src: "/images/AGV.jpg", height: 300, width: 350}
+    ]
     useEffect(() => {
         onAuthStateChanged(authentication, (user) => {
             console.log("🚀 ~ file: header.js:15 ~ onAuthStateChanged ~ user:", user)
@@ -58,8 +62,9 @@ const Machine = () => {
                     machineTypeList.map((item, index) => (
                     <Col key={index} className="m-5 p-4" style={{ border: "0" }}>
                         <Card className="h-100">
-                            <Card.Header className="p-3 rounded-4" style={{ backgroundColor: "rgb(255, 255, 44"}}>
-                                <Link size={300} />
+                            
+                            <Card.Header className="p-3 rounded-4">
+                                <img key={index} src={imgList[index % imgList.length].src} alt="img" height= "300" />
                             </Card.Header>
                             <Card.Body className="fs-5 text-start">
                                 <div className="py-2">{item.type_name}</div>
@@ -82,7 +87,23 @@ const Machine = () => {
                     </Col>
                     ))
                 ) : (
-                    <div>無資料</div>
+                    imgList.map((img, index) => (   
+                        <Col className="m-5 p-4" style={{ border: "0" }}>
+                            <Card className="h-100">
+                                <Card.Header className="p-3 rounded-4" style={{  }}>
+                                    <img key={index} src={img.src} alt="img" height={img.height} width={img.width}/>
+                                </Card.Header>
+                                <Card.Body className="fs-5 text-start">
+                                    <div className="py-2">...</div>
+                                    <div>...</div>
+                                    <div className="py-2">每小時$ ...</div>
+                                    <div className="py-2">
+                                        <Button disabled>選擇</Button>
+                                    </div>
+                                </Card.Body>
+                            </Card>
+                        </Col>
+                    ))
                 )}
             </Row>
         </Container>   

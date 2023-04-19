@@ -38,10 +38,10 @@ function Header() {
             <a href="/home/main" style={{ textDecoration: "none" }}>
                 <img className="pb-2"
                     alt="Eaas"
-                    src={('/images/cleanerIcon.png')}
+                    src={('/images/PCB.png')}
                     height={30}
                 />
-                <span className="ms-2" style={{ fontSize: "1.5rem", fontWeight: "bold" }}>EaaS</span>
+                <span className="ms-2" style={{ fontSize: "1.5rem", fontWeight: "bold" }}>開南大學專題-設備即服務</span>
             </a>
             </Navbar.Brand>
             <Nav className="ms-auto pe-4">
