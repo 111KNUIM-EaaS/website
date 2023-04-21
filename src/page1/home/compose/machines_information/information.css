@@ -1,0 +1,16 @@
+.icons {
+    transition: transform 0.2s ease-in-out;
+}
+
+.icons:hover {
+    transform: scale(1.3);
+    font-weight: bold;
+}
+
+.success:hover {
+    color:rgb(17, 173, 56);
+}
+.danger:hover {
+    color:rgb(255,35,35);
+
+}
