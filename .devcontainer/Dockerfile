@@ -8,5 +8,3 @@ RUN echo "node ALL=(ALL:ALL) NOPASSWD:ALL" >> /etc/sudoers.d/node
 RUN npm install -g create-react-app
 
 USER node
-
-RUN mkdir -p /home/node/website/
