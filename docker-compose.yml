@@ -1,0 +1,7 @@
+version: '3.4'
+services:
+  website:
+    build: .
+    container_name: website-test
+    ports:
+      - 127.0.0.1:8005:80
