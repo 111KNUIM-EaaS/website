@@ -58,6 +58,7 @@ const State = () => {
         const newItems = [...currentItems];
         newItems.splice(index - startIndex, 1);
         machineList.splice(startIndex, currentItems.length, ...newItems);
+        window.location.href = "/home/machine/information";
     }
 
     return (
@@ -72,19 +73,17 @@ const State = () => {
                                 </Card.Header>
                                 <Card.Body>
                                     <div>種類：{state.type_name}</div>
-                                    <div>電量：{state.machines_power}</div>
-                                    <Button onClick={() => returnMachine(state.machines_id, startIndex + index)} data-index={index}>停止</Button>
+                                    <Button onClick={() => returnMachine(state.machines_id, startIndex + index)} data-index={index}>查看更多</Button>
                                 </Card.Body>
                             </Card>
                         </Col>
                     </Row>
-                 )) 
+            )) 
             ) : (
                 <div className="fs-2 text-center">
                     <p className="mt-3 pt-2">尚未新增機器</p>
                     <a href="/home/machine">新增機器</a>
-                </div>
-               
+                </div>           
             )}
             <Row className="justify-content-center mt-5 pt-5">
                 <Col md={4} className="d-flex justify-content-center">
@@ -95,7 +94,6 @@ const State = () => {
                     />
                 </Col>
             </Row>
-           
         </Container>
     )
 }
