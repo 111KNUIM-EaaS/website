@@ -19,16 +19,8 @@ const State = () => {
             console.log("🚀 ~ file: state.js:16 ~ onAuthStateChanged ~ user:", user);
             setUser(user);
             console.log("🚀 ~ file: state.js:19 ~ onAuthStateChanged ~ user.uid:", user.uid);
-            axios
-                .post(`http://${apiConf.host}:${apiConf.port}/api/machines/state`, { uid: user.uid })
-                .then(res => {
-                    console.table("🚀 ~ file: state.js: 23 ~ useEffect ~ res data:", res.data.data);
-                    setMachineList(res.data.data);
-                })
-                .catch(err => {
-                    console.log("🚀 ~ file: state.js:21 ~ useEffect ~ err:", err)
-                });
-            });
+            getMachineList();
+        });
     }, [user]);
     
     const totalPages = Math.ceil(machineList.length / itemsPerPage);
@@ -40,6 +32,18 @@ const State = () => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
     const currentItems = machineList.slice(startIndex, endIndex);
+
+    const getMachineList = () => {
+        axios
+        .post(`http://${apiConf.host}:${apiConf.port}/api/machines/state`, { uid: user.uid })
+        .then(res => {
+            console.table("🚀 ~ file: state.js: 23 ~ useEffect ~ res data:", res.data.data);
+            setMachineList(res.data.data);
+        })
+        .catch(err => {
+            console.log("🚀 ~ file: state.js:21 ~ useEffect ~ err:", err)
+        });
+    }
 
     const returnMachine = (machines_id, index) => {
         const now = new Date();
@@ -61,6 +65,31 @@ const State = () => {
         window.location.href = "/home/machine/information";
     }
 
+    const delMachine = (rid) => {
+        console.log("🚀 ~ file: state.js:66 ~ delMachine ~ rid:", rid);
+        const data = {  // data to send to backend
+            rid: rid
+        };
+        // console.log("🚀 ~ file: machine.js:30 ~ handleBorrowTime ~ data:", data);
+        
+        const headers = {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'User': user.uid,
+        };
+        // console.log("🚀 ~ file: machine.js:30 ~ handleBorrowTime ~ headers:", headers);
+
+        axios.post(`http://${apiConf.host}:${apiConf.port}/api/machines/delete`, data, { headers: headers })
+             .then(res => {
+                console.log("🚀 ~ file: machine.js:30 ~ handleBorrowTime ~ res:", res);
+                getMachineList();
+             })
+             .catch(err => {
+                console.log("🚀 ~ file: machine.js:30 ~ handleBorrowTime ~ err:", err);
+                window.location.reload();
+             });
+    }
+
     return (
         <Container fluid>
             {machineList.length >= 1 ? (
@@ -73,11 +102,11 @@ const State = () => {
                                 </Card.Header>
                                 <Card.Body>
                                     <div>種類：{state.machine.type}</div>
-                                    <div>狀態：{(state.machine.status == 0)? "離線" : (state.machine.status == 1)? "啟動中" : (state.machine.status == 2)? "啟動" : (state.machine.status == 3)? "暫停中" : (state.machine.status == 4)? "暫停" : "" }</div>
+                                    <div>狀態：{(state.machine.status === 0)? "離線" : (state.machine.status === 1)? "啟動中" : (state.machine.status === 2)? "啟動" : (state.machine.status === 3)? "暫停中" : (state.machine.status === 4)? "暫停" : "" }</div>
                                     <div>價格：{state.machine.price} 元/小時</div>
                                     <div>Github: <a>{state.github.owner}/{state.github.repo}</a></div>
                                     <Button onClick={() => returnMachine(state.machines_id, startIndex + index)} data-index={index}>查看更多</Button>
-                                    <Button variant="outline-danger" onClick={() => {}} data-index={index}>刪除機器</Button>
+                                    <Button variant="outline-danger" onClick={() => {delMachine(state.id)}} data-index={index}>刪除機器</Button>
                                 </Card.Body>
                             </Card>
                         </Col>
