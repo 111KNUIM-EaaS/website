@@ -69,11 +69,15 @@ const State = () => {
                         <Col>
                             <Card className="fs-2">
                                 <Card.Header>
-                                    machine{state.machines_id}
+                                    {state.project_name}
                                 </Card.Header>
                                 <Card.Body>
-                                    <div>種類：{state.type_name}</div>
+                                    <div>種類：{state.machine.type}</div>
+                                    <div>狀態：{(state.machine.status == 0)? "離線" : (state.machine.status == 1)? "啟動中" : (state.machine.status == 2)? "啟動" : (state.machine.status == 3)? "暫停中" : (state.machine.status == 4)? "暫停" : "" }</div>
+                                    <div>價格：{state.machine.price} 元/小時</div>
+                                    <div>Github: <a>{state.github.owner}/{state.github.repo}</a></div>
                                     <Button onClick={() => returnMachine(state.machines_id, startIndex + index)} data-index={index}>查看更多</Button>
+                                    <Button variant="outline-danger" onClick={() => {}} data-index={index}>刪除機器</Button>
                                 </Card.Body>
                             </Card>
                         </Col>
@@ -83,7 +87,7 @@ const State = () => {
                 <div className="fs-2 text-center">
                     <p className="mt-3 pt-2">尚未新增機器</p>
                     <a href="/home/machine">新增機器</a>
-                </div>           
+                </div>
             )}
             <Row className="justify-content-center mt-5 pt-5">
                 <Col md={4} className="d-flex justify-content-center">
