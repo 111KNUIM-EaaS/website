@@ -45,24 +45,8 @@ const State = () => {
         });
     }
 
-    const returnMachine = (machines_id, index) => {
-        const now = new Date();
-        setReturnTime(now);
-        console.log("🚀 ~ file: state.js:49 ~ returnMachine ~ now:", now);
-        console.log("🚀 ~ file: state.js:50 ~ returnMachine ~ machines_id:", machines_id);
-        axios
-        .post(`http://${apiConf.host}:${apiConf.port}/api/machines/return_time`, { returnTime: now, machineID: machines_id, uid: user.uid})
-        .then(res => {
-            console.log("🚀 ~ file: state.js:54 ~ returnMachine ~ res:", res);
-        })
-        .catch(err => {
-            console.log("🚀 ~ file: state.js:57 ~ returnMachine ~ err:", err);
-        })
-        console.log("58", machineList);
-        const newItems = [...currentItems];
-        newItems.splice(index - startIndex, 1);
-        machineList.splice(startIndex, currentItems.length, ...newItems);
-        window.location.href = "/home/machine/information";
+    const returnMachine = (rid) => {
+        window.location.href = "/home/machine/information/?rid=" + rid;
     }
 
     const delMachine = (rid) => {
@@ -105,7 +89,7 @@ const State = () => {
                                     <div>狀態：{(state.machine.status === 0)? "離線" : (state.machine.status === 1)? "啟動中" : (state.machine.status === 2)? "啟動" : (state.machine.status === 3)? "暫停中" : (state.machine.status === 4)? "暫停" : "" }</div>
                                     <div>價格：{state.machine.price} 元/小時</div>
                                     <div>Github: <a>{state.github.owner}/{state.github.repo}</a></div>
-                                    <Button onClick={() => returnMachine(state.machines_id, startIndex + index)} data-index={index}>查看更多</Button>
+                                    <Button onClick={() => returnMachine(state.id)} data-index={index}>查看更多</Button>
                                     <Button variant="outline-danger" onClick={() => {delMachine(state.id)}} data-index={index}>刪除機器</Button>
                                 </Card.Body>
                             </Card>

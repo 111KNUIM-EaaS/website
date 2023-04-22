@@ -1,13 +1,54 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, Container, Row, Col, Nav, Navbar, Toast, Form, Button} from "react-bootstrap"
 import { PlayBtn, PauseBtn, StopBtn, Hammer } from "react-bootstrap-icons";
+import { authentication } from "../../../../compose/firebase";
+import { onAuthStateChanged } from "firebase/auth";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './information.css';
+import axios from 'axios';
+import apiConf from '../../../../conf/apiConf.json'
 
 const MachineInformation = () => {
     const [validated, setValidated] = useState(false);
+    const [user, setUser] = useState(null);
     const [showA, setShowA] = useState(false);
+    const [rid, setRid] = useState(undefined);
     const toggleShowA = () => setShowA(!showA);
+
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const value  = params.get('rid');
+        setRid(value);
+
+        onAuthStateChanged(authentication, (user) => {
+            setUser(user);
+            getMachineInfo();
+        });
+    }, [user]);
+
+    const getMachineInfo = () => {
+        // header
+        const headers = {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'User': user.uid,
+        };
+
+        // data
+        const data = {
+            rid: rid,
+        }
+
+        // axios
+        axios.post(`http://${apiConf.host}:${apiConf.port}/api/machines/info`, data, { headers: headers })
+             .then(res => {
+                console.log("🚀 ~ file: information.js:21 ~ useEffect ~ res data:", res.data);
+             })
+             .catch(err => {
+                console.log("information.js getMachineInfo err:", err);
+                window.location.href = "/home/state";
+             });
+    }
 
     const icon_list = [
         {icon: <PlayBtn size={30} className='success'/>, name: <span className='success'>運行</span>, function: () => {console.log("play")}},
