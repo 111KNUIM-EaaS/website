@@ -9,8 +9,15 @@ import apiConf from '../../../../conf/apiConf.json'
 const Machine = () => {
     const [validated, setValidated] = useState(false);
     const [showA, setShowA] = useState(false);
-    const toggleShowA = () => setShowA(!showA);
+    const [typeID, setTypeID] = useState(0);
+    const toggleShowA = (id) => {
+        // set the window to the top of the page
+        window.scrollTo(0, 0);
 
+        // console.log("🚀 ~ file: machine.js:14 ~ toggleShowA ~ id:", id)
+        setTypeID(id);
+        setShowA(!showA);
+    };
     const [user, setUser] = useState(null);
     const [machineTypeList, setMachineTypeList] = useState(undefined);
     const [borrowTime, setBorrowTime] = useState([]);
@@ -27,43 +34,85 @@ const Machine = () => {
             console.log("🚀 ~ file: header.js:15 ~ onAuthStateChanged ~ user.uid:", user.uid)
 
         });
-        axios
-            .get(`http://${apiConf.host}:${apiConf.port}/api/machines/list`)
+
+        getMachineList();
+        setInterval(getMachineList, 5000); // 5 seconds
+    }, []);
+
+    // Get machine list
+    function getMachineList() {
+        axios.get(`http://${apiConf.host}:${apiConf.port}/api/machines/list`)
             .then(res => {
-                console.table("🚀 ~ file: machine.js:13 ~ useEffect ~ res data:", res.data.data);
-                setMachineTypeList(res.data.data);
+                if(machineTypeList === undefined) {
+                    setMachineTypeList(res.data.data);
+                } else if(!areArraysEqual(machineTypeList, res.data.data)) {
+                    setMachineTypeList(res.data.data);
+                }
             })
             .catch(err => {
                 console.log("🚀 ~ file: machine.js:21 ~ useEffect ~ err:", err)
             });
-    }, []);
+    }
 
-    const handleSubmit = (event, type_id) => {
-        const user_name_value = document.getElementById("user_name").value;
-        const now = new Date();
-        setBorrowTime(now);
-        console.log("🚀 ~ file: information.js:22 ~ handleSubmit ~ user_name_value:", user_name_value)
-        
-        axios
-            .post(`http://${apiConf.host}:${apiConf.port}/api/machines/borrow_state`, { borrowTime: now, uid: user.uid, type_id: type_id})
-            .then(res => {
-                console.log("🚀 ~ file: machine.js:30 ~ handleBorrowTime ~ res:", res);
-                
-            })
-            .catch(err => {
-                console.log("🚀 ~ file: machine.js:30 ~ handleBorrowTime ~ err:", err);
-            });
-        
-        
-        const form = event.currentTarget;
-        if (form.checkValidity() === false) {
-            event.preventDefault();
-            event.stopPropagation();
+    // Compare two arrays
+    const areArraysEqual = (arr1, arr2) => {
+        if (arr1.length !== arr2.length) {
+            return false;
         }
 
-        toggleShowA();
-        setValidated(true);
-        window.location.href = "/home/state";
+        return arr1.every((val, index) => val === arr2[index]);
+    };
+
+    const handleSubmit = (event) => {
+        document.getElementById("summit_button").disabled = true;
+
+        const date = new Date(); // Create a new Date object with the current date and time
+        const options = { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', timeZoneName: 'short' }; // Define options for formatting the date string
+        const dateString = date.toLocaleDateString('en-US', options); // Format the date into a string using the options
+        setBorrowTime(dateString);
+
+        // Get user information
+        const user_project      = document.getElementById("user_project").value;
+        const user_name_value   = document.getElementById("user_name"   ).value;
+        const repo_value        = document.getElementById("repo_value"  ).value;
+        const token_value       = document.getElementById("token_value" ).value;
+
+        const data = {  // data to send to backend
+            type_id: typeID,
+            user_project: user_project,
+            user_name: user_name_value,
+            repo: repo_value,
+            token: token_value
+        };
+        // console.log("🚀 ~ file: machine.js:30 ~ handleBorrowTime ~ data:", data);
+        
+        const headers = {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'X-Date': dateString,
+            'User': user.uid,
+        };
+        // console.log("🚀 ~ file: machine.js:30 ~ handleBorrowTime ~ headers:", headers);
+
+        axios.post(`http://${apiConf.host}:${apiConf.port}/api/machines/borrow_state`, data, { headers: headers })
+             .then(res => {
+                console.log("🚀 ~ file: machine.js:30 ~ handleBorrowTime ~ res:", res);
+                window.location.href = "/home/state";
+             })
+             .catch(err => {
+                console.log("🚀 ~ file: machine.js:30 ~ handleBorrowTime ~ err:", err);
+                window.location.reload();
+             });
+        
+        // const form = event.currentTarget;
+        // if (form.checkValidity() === false) {
+        //     event.preventDefault();
+        //     event.stopPropagation();
+        // }
+
+        // toggleShowA();
+        // setValidated(true);
+        // window.location.href = "/home/state";
     };
 
     return (
@@ -84,7 +133,7 @@ const Machine = () => {
                                             <div>{item.introduce}</div>
                                             <div className="py-2">每小時${item.price *60 *60}</div>
                                             <div className="py-2">
-                                                <Button onClick={toggleShowA}>選擇</Button>
+                                                <Button onClick={() => toggleShowA(item.machines_type)}>選擇</Button>
                                             </div>
                                         </Card.Body>
                                     </Card>
@@ -177,7 +226,7 @@ const Machine = () => {
                         feedbackType="invalid"
                         className='m-3 text-start'
                     />
-                    <Button type="button" onClick={() => handleSubmit()} className='mb-3 ms-4'>儲存並送出</Button>
+                    <Button type="button" id="summit_button" onClick={() => handleSubmit()} className='mb-3 ms-4'>儲存並送出</Button>
                 </Form>
             </Toast>
         </Container>   
