@@ -8,9 +8,9 @@ import '../home.css'
 function Sidebar({ show, handleClose }) {
     const linkList = [ 
         {href: "/home/main", svg: <HouseFill size={30} className='pb-1' />, text: "Home"},
-        {href: "/home/machine", svg: <Clipboard2Plus size={30} className='pb-1' />, text: "Machine"},
-        {href: "/home/state", svg: <HddStack size={30} className='pb-1' />, text: "State"},
-        {href: "/home/bill", svg: <Receipt size={30} className='pb-1'/>, text: "Bill"}
+        {href: "/home/machine", svg: <Clipboard2Plus size={30} className='pb-1' />, text: "Add Machine"},
+        {href: "/home/state", svg: <HddStack size={30} className='pb-1' />, text: "Machine State"},
+        // {href: "/home/bill", svg: <Receipt size={30} className='pb-1'/>, text: "Bill"}
     ]
 
     const informationList = [
@@ -24,7 +24,7 @@ function Sidebar({ show, handleClose }) {
     const isAtInformation = location.pathname.startsWith('/information');
     
     return (
-        <Offcanvas show={show} onHide={handleClose} className="" style={{ width: "200px" }}>
+        <Offcanvas show={show} onHide={handleClose} className="" style={{ width: "300px" }}>
             <Offcanvas.Header closeButton>
                 <Offcanvas.Title />
             </Offcanvas.Header>
