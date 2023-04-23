@@ -103,16 +103,6 @@ const Machine = () => {
                 console.log("🚀 ~ file: machine.js:30 ~ handleBorrowTime ~ err:", err);
                 window.location.reload();
              });
-        
-        // const form = event.currentTarget;
-        // if (form.checkValidity() === false) {
-        //     event.preventDefault();
-        //     event.stopPropagation();
-        // }
-
-        // toggleShowA();
-        // setValidated(true);
-        // window.location.href = "/home/state";
     };
 
     return (
@@ -120,42 +110,38 @@ const Machine = () => {
             <Row className="h-100 align-items-center">
                 {machineTypeList && machineTypeList.length > 0 ? (
                     machineTypeList.map((item, index) => (
-                    <Col key={index} className="m-5 p-4" style={{ border: "0" }}>
-                        
-                            {
-                                machineTypeList[index].count_same > 0 ? (
-                                    <Card className="h-100">
-                                        <Card.Header className="p-3 rounded-4">
-                                        <img key={index} src={imgList[index % imgList.length].src} alt="img" height= "300" />
-                                        </Card.Header>
-                                        <Card.Body className="fs-5 text-start">
-                                            <div className="py-2">{item.type_name}</div>
-                                            <div>{item.introduce}</div>
-                                            <div className="py-2">每小時${item.price *60 *60}</div>
-                                            <div className="py-2">
-                                                <Button onClick={() => toggleShowA(item.machines_type)}>選擇</Button>
-                                            </div>
-                                        </Card.Body>
-                                    </Card>
-                                ) : (
-                                    <Card className="h-100">
-                                        <Card.Header className="p-3 rounded-4">
-                                        <img key={index} src={imgList[index % imgList.length].src} alt="img" height= "300" style={{ opacity: "0.5" }} />
-                                        </Card.Header>
-                                        <Card.Body className="fs-5 text-start">
-                                            <div className="py-2">{item.type_name}</div>
-                                            <div>{item.introduce}</div>
-                                            <div className="py-2">每小時${item.price *60 *60}</div>
-                                            <div className="py-2">
-                                                <Button disabled>無法選擇</Button>
-                                            </div>
-                                        </Card.Body>
-                                    </Card> 
-                                )
-                            }
-                            {/* <Button onClick={() => handleBorrowTime(item.type_id)}>選擇</Button> */}
-                            {/* <Button onClick={toggleShowA}>選擇</Button> */}
-                        
+                    <Col key={index} className="m-5 p-4" style={{ border: "0" }}>       
+                        {
+                            machineTypeList[index].count_same > 0 ? (
+                                <Card className="h-100">
+                                    <Card.Header className="p-3 rounded-4">
+                                    <img key={index} src={imgList[index % imgList.length].src} alt="img" height= "300" />
+                                    </Card.Header>
+                                    <Card.Body className="fs-5 text-start">
+                                        <div className="py-2">{item.type_name}</div>
+                                        <div>{item.introduce}</div>
+                                        <div className="py-2">每小時${item.price *60 *60}</div>
+                                        <div className="py-2">
+                                            <Button onClick={() => toggleShowA(item.machines_type)}>選擇</Button>
+                                        </div>
+                                    </Card.Body>
+                                </Card>
+                            ) : (
+                                <Card className="h-100">
+                                    <Card.Header className="p-3 rounded-4">
+                                    <img key={index} src={imgList[index % imgList.length].src} alt="img" height= "300" style={{ opacity: "0.5" }} />
+                                    </Card.Header>
+                                    <Card.Body className="fs-5 text-start">
+                                        <div className="py-2">{item.type_name}</div>
+                                        <div>{item.introduce}</div>
+                                        <div className="py-2">每小時${item.price *60 *60}</div>
+                                        <div className="py-2">
+                                            <Button disabled>無法選擇</Button>
+                                        </div>
+                                    </Card.Body>
+                                </Card> 
+                            )
+                        }                  
                     </Col>
                     ))
                 ) : (
@@ -178,6 +164,7 @@ const Machine = () => {
                     ))
                 )}
             </Row>
+            
             <Toast show={showA} onClose={toggleShowA} className="position-absolute top-50 start-50 translate-middle fs-5" style={{  width:"60vw", maxWidth: "90vw", zIndex: "4" }}>
                 <Toast.Header className="bg-dark text-white">
                     <strong className="me-auto">GitHub資訊更改</strong>
@@ -234,21 +221,3 @@ const Machine = () => {
 }
 
 export default Machine;
-
-    
-    // const handleBorrowTime = (type_id) => {
-    //     const now = new Date();
-    //     setBorrowTime(now);
-    //     console.log("🚀 ~ file: machine.js:25 ~ handleBorrowTime ~ now:", now);
-    //     console.log(user);
-    //     axios
-    //         .post(`http://${apiConf.host}:${apiConf.port}/api/machines/borrow_state`, { borrowTime: now, uid: user.uid, type_id: type_id})
-    //         .then(res => {
-    //             console.log("🚀 ~ file: machine.js:30 ~ handleBorrowTime ~ res:", res);
-                
-    //         })
-    //         .catch(err => {
-    //             console.log("🚀 ~ file: machine.js:30 ~ handleBorrowTime ~ err:", err);
-    //         });
-    //     window.location.href = "/home/state";
-    // }

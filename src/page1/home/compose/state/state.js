@@ -92,7 +92,9 @@ const State = () => {
                                     <Button onClick={() => returnMachine(state.id)} data-index={index}>查看更多</Button>
                                     <Button variant="outline-danger" onClick={() => {delMachine(state.id)}} data-index={index}>刪除機器</Button>
                                 </Card.Body>
+                                
                             </Card>
+                            <Button size="lg" className="d-flex justify-content-center mt-4" href="/home/machine">新增機器</Button>
                         </Col>
                     </Row>
             )) 
@@ -102,7 +104,7 @@ const State = () => {
                     <a href="/home/machine">新增機器</a>
                 </div>
             )}
-            <Row className="justify-content-center mt-5 pt-5">
+            <Row className="justify-content-center mt-3 pt-5">
                 <Col md={4} className="d-flex justify-content-center">
                     <PaginationComponent 
                         currentPage={currentPage}
