@@ -13,15 +13,17 @@ const MachineInformation = () => {
     const [rid,                setRid               ] = useState(undefined);
     const [user,               setUser              ] = useState(null);
     const [showA,              setShowA             ] = useState(false);
-    const [infoList ,          setInfoList          ] = useState([]);
+    const [bodyInfo,           setBodyInfo          ] = useState("");
     const [validated,          setValidated         ] = useState(false);
     const [machineInfo,        setMachineInfo       ] = useState(undefined);
     const [gitHubOTAData,      setGitHubOTAData     ] = useState(undefined);
     const [githubReleasesList, setGithubReleasesList] = useState([]);
-
+    
     const toggleShowA = () => setShowA(!showA);
     
     useEffect(() => {
+        setValidated(false);
+
         const params = new URLSearchParams(window.location.search);
         const value  = params.get('rid');
         setRid(value);
@@ -33,19 +35,19 @@ const MachineInformation = () => {
 
     useEffect(() => {
         if (user) {
-            getMachineInfo();
+            getMachineInfo(user.uid);
+            // setInterval(() => {
+            //     getMachineInfo(user.uid);
+            // }, 5000);
         }
-      }, [user]);
-      
-      
-      
-      
-    const getMachineInfo = async() => {
+    }, [user]);
+
+    const getMachineInfo = async(uid) => {
         // header
         const headers = {
             'Content-Type': 'application/json',
             'Access-Control-Allow-Origin': '*',
-            'User': user.uid
+            'User': uid
         };
 
         // data
@@ -58,7 +60,6 @@ const MachineInformation = () => {
             .post(`http://${apiConf.host}:${apiConf.port}/api/machines/info`, data, { headers: headers })
              .then(res => {
                 // console.log("🚀 ~ file: information.js:21 ~ useEffect ~ res data:", res.data);
-                setInfoList(res.data);
                 const data = res.data;
                 console.log("🚀 ~ file: information.js:51 ~ getMachineInfo ~ data:", data)
                 setMachineInfo(data)
@@ -71,7 +72,7 @@ const MachineInformation = () => {
     }
 
     const machineStatus = (status) => {
-        console.log("status:", status, user.uid);
+        // console.log("status:", status, user.uid);
 
         const headers = {
             'Content-Type': 'application/json',
@@ -86,8 +87,8 @@ const MachineInformation = () => {
 
         axios.post(`http://${apiConf.host}:${apiConf.port}/api/machines/update_status`, data, { headers: headers })
             .then(res => {
-                console.log("🚀 ~ file: information.js:21 ~ useEffect ~ res data:", res);
-                // window.location.href = "/home/state";
+                console.log("machineStatus data:", res.data);
+                getMachineInfo(user.uid);
             })
             .catch(err => {
                 console.log("information.js machineStatus err:", err);
@@ -116,12 +117,19 @@ const MachineInformation = () => {
                 });
 
             const data = await response.json();
-            console.log("gitHubOTAData:", data);
-            setGithubReleasesList(data);
-            setGitHubOTAData(data[0]);
+            const code = await response.status;
+            if(code !== 200) {
+                console.log("gitHubOTAData:", data);
+                setBodyInfo("GitHub 取得資料失敗，請更新 owner(專案擁有者), repo(專案名稱), token(權限)")
+            } else {
+                console.log("gitHubOTAData:", data);
+                setGithubReleasesList(data);
+                setGitHubOTAData(data[0]);
+            }
         }
         catch (error) {
             console.log(`[https://api.github.com/repos/${owner}/${repo}/releases]error:`, error);
+            setBodyInfo("GitHub 取得資料失敗，請更新 owner(專案擁有者), repo(專案名稱), token(權限)")
         }
     }
 
@@ -136,13 +144,13 @@ const MachineInformation = () => {
     const handleSubmit = (event) => {
         document.getElementById("summit_button").disabled = true;
 
-        const user_project = document.getElementById("user_project").value;
-        const repo_value = document.getElementById("repo_value").value;
-        const token_value = document.getElementById("token_value").value;
+        const owner_value = document.getElementById("owner").value;
+        const repo_value  = document.getElementById("repo").value;
+        const token_value = document.getElementById("token").value;
 
         const data = {
             rid: rid,
-            user_project: user_project,
+            owner: owner_value,
             repo: repo_value,
             token: token_value
         };
@@ -156,17 +164,15 @@ const MachineInformation = () => {
         
         axios.post(`http://${apiConf.host}:${apiConf.port}/api/machines/update_info`, data, { headers: headers })
             .then(res => {
-                console.log("🚀 ~ file: information.js:21 ~ useEffect ~ res data:", res);
-                window.location.href = "/home/state";
+                console.log("information.js handleSubmit:", res);
+                getMachineInfo(user.uid);
+                toggleShowA();
             })
             .catch(err => {
-                console.log("information.js getMachineInfo err:", err);
-                
+                console.log("information.js handleSubmit err:", err);
             });
-        window.location.reload();
     };
-    
-    // console.log("🚀 ~ file: information.js:21 ~ useEffect ~ res data:", infoList)
+
 
     const handleSelect = (eventKey) => {
         console.log('Selected event key:', eventKey);
@@ -194,11 +200,11 @@ const MachineInformation = () => {
         // axios
         axios.post(`http://${apiConf.host}:${apiConf.port}/api/machines/ota`, data, { headers: headers })
              .then(res => {
-                console.log("information.js getMachineInfo res:", res.data);
-
+                console.log("information.js handleButtonClick res:", res.data);
+                getMachineInfo(user.uid);
              })
              .catch(err => {
-                console.log("information.js getMachineInfo err:", err);
+                console.log("information.js handleButtonClick err:", err);
                 // window.location.reload();
              });
     }
@@ -208,7 +214,9 @@ const MachineInformation = () => {
             <Row className="pt-4" style={{ height: "15vh"}} >
                 <Col>
                     <Navbar>
-                        <Navbar.Brand style={{ fontSize: "1.5rem", fontWeight: "bold" }}>{infoList.project_name} (status:)</Navbar.Brand>
+                        <Navbar.Brand style={{ fontSize: "1.5rem", fontWeight: "bold" }}>
+                            {(machineInfo)? machineInfo.project_name : ""} (status: { (machineInfo === undefined)?  "離線" : (machineInfo.machine.status === 1)? "運行中" : (machineInfo.machine.status === 2)? "運行" : (machineInfo.machine.status === 3)? "停止中" : (machineInfo.machine.status === 4)? "停止" : (machineInfo.machine.status === 5)? "更新中" : (machineInfo.machine.status === 6)? "更新完畢" : "未知錯誤" })
+                        </Navbar.Brand>
                         <Nav className="ms-auto">
                             {icon_list.map((icon, index) => (
                                 <Nav.Link key={index} onClick={icon.function}>
@@ -254,6 +262,7 @@ const MachineInformation = () => {
                                                 <Col style={{textAlign: 'right'}}>
                                                     <DropdownButton as={ButtonGroup} title={gitHubOTAData === undefined? "Tag" :gitHubOTAData.tag_name} onSelect={handleSelect}>
                                                         {
+                                                            gitHubOTAData === undefined? "" :
                                                             githubReleasesList.map(releases => {
                                                                 
                                                                 return (
@@ -281,8 +290,10 @@ const MachineInformation = () => {
                                             </Row>
                                         </Card.Header>
 
-                                        <Card.Body>
-                                            <ReactMarkdown>{gitHubOTAData === undefined? "" : gitHubOTAData.body}</ReactMarkdown>
+                                        <Card.Body> 
+                                            {
+                                                gitHubOTAData === undefined? <h2>{bodyInfo}</h2> : <ReactMarkdown>{gitHubOTAData.body}</ReactMarkdown>
+                                            }
                                         </Card.Body>
 
                                         <Card.Footer>
@@ -345,25 +356,25 @@ const MachineInformation = () => {
                     <strong className="me-auto">GitHub資訊更改</strong>
                 </Toast.Header>
                 <Form noValidate validated={validated} className= "bg-light">
-                    <Form.Group as={Row} className="mb-1 p-4" controlId="user_project">
+                    <Form.Group as={Row} className="mb-1 p-4" controlId="owner">
                         <Form.Label column sm="1">
-                            user_name
+                            owner
                         </Form.Label>
                         <Col sm="10">
-                            <Form.Control required type="text" placeholder="請輸入專案名稱"/>
+                            <Form.Control required type="text" placeholder="請輸入 GitHub 擁有者"/>
                             <Form.Control.Feedback type="invalid">user_project is a required field</Form.Control.Feedback>
                         </Col>
                     </Form.Group>
-                    <Form.Group as={Row} className="mb-1 p-4" controlId="repo_value">
+                    <Form.Group as={Row} className="mb-1 p-4" controlId="repo">
                         <Form.Label column sm="1">
                             repo
                         </Form.Label>
                         <Col sm="10" type="invalid">
-                            <Form.Control required type="text" placeholder="請輸入GitHubRepo"/>
+                            <Form.Control required type="text" placeholder="請輸入 GitHub 儲存庫名稱"/>
                             <Form.Control.Feedback type="invalid">repo is a required field</Form.Control.Feedback>
                         </Col>
                     </Form.Group>
-                    <Form.Group as={Row} className="mb-1 p-4" controlId="token_value">
+                    <Form.Group as={Row} className="mb-1 p-4" controlId="token">
                         <Form.Label column sm="1">
                             Token
                         </Form.Label>
@@ -379,7 +390,7 @@ const MachineInformation = () => {
                         feedbackType="invalid"
                         className='m-3'
                     />
-                     <Button type="button" id="summit_button" onClick={() => handleSubmit()} className='mb-3 ms-4'>儲存並送出</Button>
+                    <Button type="button" id="summit_button" onClick={() => handleSubmit()} className='mb-3 ms-4'>儲存並送出</Button>
                 </Form>
             </Toast>
         </Container>
