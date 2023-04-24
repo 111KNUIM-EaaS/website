@@ -4,7 +4,7 @@ import Home from "./page1/home/home";
 import Information from "./page1/information/information";
 import Main from "./page1/home/compose/main/main";
 import State from "./page1/home/compose/state/state";
-import Bill from "./page1/home/compose/bill/bill";
+// import Bill from "./page1/home/compose/bill/bill";
 import MachineInformation from "./page1/home/compose/machines_information/information";
 import Login from "./page1/login/login";
 import Machine from "./page1/home/compose/machine/machine";
