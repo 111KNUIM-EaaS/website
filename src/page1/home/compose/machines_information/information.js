@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Card, Container, Row, Col, Nav, Navbar, Toast, Form, Button, DropdownButton, ButtonGroup, Dropdown, ListGroup} from "react-bootstrap"
-import { PlayBtn, PauseBtn, StopBtn, Hammer, Tag, FileEarmarkMedical } from "react-bootstrap-icons";
+import { PlayBtn, PauseBtn, StopBtn, Hammer, Tag, FileEarmarkMedical, DoorOpen } from "react-bootstrap-icons";
 import { authentication } from "../../../../compose/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -126,6 +126,7 @@ const MachineInformation = () => {
     }
 
     const icon_list = [
+        {icon: <DoorOpen size={30} className='success'/>, name: <span className='success'>上頁</span>, function: () => {window.location.href = "/home/state"}},
         {icon: <PlayBtn size={30} className='success'/>, name: <span className='success'>運行</span>,function: () => machineStatus(1)},
         {icon: <PauseBtn size={30} className='danger'/>, name: <span className='danger'>暫停</span>, function: () => machineStatus(3)},
         {icon: <StopBtn  size={30} className='danger'/>, name: <span className='danger'>中止</span>, function: () => machineStatus(0)},
@@ -205,7 +206,7 @@ const MachineInformation = () => {
 
     return (
         <Container fluid style={{ position: 'relative', height: "95vh" }}>
-            <Row className="pt-4" style={{ height: "15vh"}} >
+            <Row className="pt-4" style={{ height: "10vh"}} >
                 <Col>
                     <Navbar>
                         <Navbar.Brand style={{ fontSize: "1.5rem", fontWeight: "bold" }}>{infoList.project_name} (status:)</Navbar.Brand>
@@ -221,32 +222,12 @@ const MachineInformation = () => {
             </Row>
             <Row>
                 <Col>
-                    {/* <Card style={{ height: "75vh"}} >
-                        <Row className='pt-4'>
-                            <Col  md={3}>
-                                <div className='fs-4'>
-                                    <p className='pb-3'>GitHub Info</p>
-                                    <p className='pb-3'>專案名稱: {infoList.project_name}</p>
-                                    <p className='pb-3'>使用者: {infoList.github.owner}</p>
-                                    <p className='pb-3'>repo: {infoList.github.repo}</p>
-                                </div>
-                            </Col>
-                            <Col  md={9}>
-                                <div className='fs-4'>
-                                    <p className='pb-3'>Machine Info: </p>
-                                    <p className='pb-3'>類型: {infoList.machine.type}</p>
-                                    <p className='pb-3'>每秒價格{infoList.machine.price}</p>
-                                    <p className='pb-3'>狀態: {infoList.machine.status}</p>
-                                    <p className='pb-3'>租借時間: {infoList.time}</p>
-                                </div>
-                            </Col>
-                        </Row> */}
-                    <Card>
+                    <Card className='CardBackground'>
                         <Container>
-                            <Row xs={1} md={1} className="align-items-center" style={{height: '85vh'}} >
+                            <Row xs={1} md={1} className="align-items-center" style={{height: '80vh'}} >
                                 <Col>
                                     <Card style={{height: '80vh'}} >
-                                        <Card.Header>
+                                        <Card.Header className='CardHeader'>
                                             <Row>
                                                 <Col>
                                                     <h2>{gitHubOTAData === undefined? "OTA 雲端更新" : gitHubOTAData.name}</h2>
@@ -286,7 +267,7 @@ const MachineInformation = () => {
                                         </Card.Body>
 
                                         <Card.Footer>
-                                            <Card>
+                                            <Card >
                                                 <Card.Header>
                                                     Assets
                                                 </Card.Header>
