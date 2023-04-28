@@ -8,9 +8,9 @@ import UserLogin from "../page1/login/compose/userLogin";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 let icons =  [
-    {id: "QuestionCircle", svg: <QuestionCircle size={30}/>, href: "/information/book"},
-    {id: "Grid3x3GapFill", svg: <Grid3x3GapFill size={30}/>, href: "/home/main"},
-    {id: "Github", svg: <Github size={30} />, href: "https://github.com/orgs/111KNUIM-EaaS/repositories"}
+    {id: "QuestionCircle",  svg: <QuestionCircle size={30}/>,   href: "https://github.com/orgs/111KNUIM-EaaS/"},
+    {id: "Grid3x3GapFill",  svg: <Grid3x3GapFill size={30}/>,   href: "/home/main"},
+    {id: "Github",          svg: <Github size={30} />,          href: "https://github.com/orgs/111KNUIM-EaaS/"}
 ]
 
 function Header() {    
@@ -39,9 +39,9 @@ function Header() {
                 <img className="pb-2"
                     alt="Eaas"
                     src={('/images/PCB.png')}
-                    height={30}
+                    height={40}
                 />
-                <span className="ms-2" style={{ fontSize: "1.5rem", fontWeight: "bold" }}>開南大學專題-設備即服務</span>
+                <span className="ms-2" style={{ fontSize: "2rem", fontWeight: "bold" }}>開南大學專題 EaaS 設備即服務</span>
             </a>
             </Navbar.Brand>
             <Nav className="ms-auto pe-4">

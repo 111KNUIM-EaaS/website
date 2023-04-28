@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Card, Container, Row, Col, Nav, Navbar, Toast, Form, Button, DropdownButton, ButtonGroup, Dropdown, ListGroup} from "react-bootstrap"
-import { PlayBtn, PauseBtn, StopBtn, Hammer, Tag, FileEarmarkMedical } from "react-bootstrap-icons";
+import { PlayBtn, PauseBtn, Trash, Hammer, Tag, FileEarmarkMedical } from "react-bootstrap-icons";
 import { authentication } from "../../../../compose/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -134,43 +134,63 @@ const MachineInformation = () => {
     }
 
     const icon_list = [
-        {icon: <PlayBtn size={30} className='success'/>, name: <span className='success'>運行</span>,function: () => machineStatus(1)},
-        {icon: <PauseBtn size={30} className='danger'/>, name: <span className='danger'>暫停</span>, function: () => machineStatus(3)},
-        {icon: <StopBtn  size={30} className='danger'/>, name: <span className='danger'>中止</span>, function: () => machineStatus(0)},
-        {icon: <Hammer size={30} className='warning' />, name: <span className='warning'>設定</span>, function: toggleShowA},
+        {icon: <PlayBtn  size={30} className='success' />, name: <span className='success'>運行</span>,function: () => machineStatus(1)},
+        {icon: <PauseBtn size={30} className='danger'  />, name: <span className='danger' >暫停</span>, function: () => machineStatus(3)},
+        {icon: <Trash    size={30} className='danger'  />, name: <span className='danger' >刪除</span>, function: () => machineStatus(0)},
+        {icon: <Hammer   size={30} className='warning' />, name: <span className='warning'>設定</span>, function: toggleShowA},
     ]
 
 
     const handleSubmit = (event) => {
         document.getElementById("summit_button").disabled = true;
 
-        const owner_value = document.getElementById("owner").value;
-        const repo_value  = document.getElementById("repo").value;
-        const token_value = document.getElementById("token").value;
+        document.getElementById('feedback_owner').style.display = 'none';
+        document.getElementById('feedback_repo' ).style.display = 'none';
 
-        const data = {
-            rid: rid,
-            owner: owner_value,
-            repo: repo_value,
-            token: token_value
-        };
+        let owner_value = document.getElementById("owner").value;
+        let repo_value  = document.getElementById("repo" ).value;
+        let token_value = document.getElementById("token").value;
 
-        const headers = {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-            'User': user.uid,
-        };
-        // console.log("🚀 ~ file: information.js:21 ~ useEffect ~ res data:", data);
-        
-        axios.post(`http://${apiConf.host}:${apiConf.port}/api/machines/update_info`, data, { headers: headers })
-            .then(res => {
-                console.log("information.js handleSubmit:", res);
-                getMachineInfo(user.uid);
-                toggleShowA();
-            })
-            .catch(err => {
-                console.log("information.js handleSubmit err:", err);
-            });
+        if(owner_value.length <= 0 || repo_value.length <= 0) {
+            if(owner_value.length <= 0) {
+                document.getElementById('feedback_owner').style.display = 'block';
+            }
+            
+            if(repo_value.length <= 0) {
+                document.getElementById('feedback_repo').style.display = 'block';
+            }
+
+            document.getElementById("summit_button").disabled = false;
+
+        } else {
+            if(token_value <= 0) {
+                token_value = null;
+            }
+
+            const data = {
+                rid: rid,
+                owner: owner_value,
+                repo:  repo_value,
+                token: token_value
+            };
+
+            const headers = {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'User': user.uid,
+            };
+            // console.log("🚀 ~ file: information.js:21 ~ useEffect ~ res data:", data);
+            
+            axios.post(`http://${apiConf.host}:${apiConf.port}/api/machines/update_info`, data, { headers: headers })
+                .then(res => {
+                    console.log("information.js handleSubmit:", res);
+                    getMachineInfo(user.uid);
+                    toggleShowA();
+                })
+                .catch(err => {
+                    console.log("information.js handleSubmit err:", err);
+                });
+        }
     };
 
 
@@ -211,11 +231,11 @@ const MachineInformation = () => {
 
     return (
         <Container fluid style={{ position: 'relative', height: "95vh" }}>
-            <Row className="pt-4" style={{ height: "15vh"}} >
+            <Row className="pt-2" style={{ height: "10vh"}} >
                 <Col>
                     <Navbar>
                         <Navbar.Brand style={{ fontSize: "1.5rem", fontWeight: "bold" }}>
-                            {(machineInfo)? machineInfo.project_name : ""} (status: { (machineInfo === undefined)?  "離線" : (machineInfo.machine.status === 1)? "運行中" : (machineInfo.machine.status === 2)? "運行" : (machineInfo.machine.status === 3)? "停止中" : (machineInfo.machine.status === 4)? "停止" : (machineInfo.machine.status === 5)? "更新中" : (machineInfo.machine.status === 6)? "更新完畢" : "未知錯誤" })
+                            {(machineInfo)? machineInfo.project_name : ""} 機器狀態: { (machineInfo === undefined)?  "離線" : (machineInfo.machine.status === 1)? "運行中" : (machineInfo.machine.status === 2)? "運行" : (machineInfo.machine.status === 3)? "停止中" : (machineInfo.machine.status === 4)? "停止" : (machineInfo.machine.status === 5)? "更新中" : (machineInfo.machine.status === 6)? "更新完畢" : "未知錯誤" }
                         </Navbar.Brand>
                         <Nav className="ms-auto">
                             {icon_list.map((icon, index) => (
@@ -229,26 +249,6 @@ const MachineInformation = () => {
             </Row>
             <Row>
                 <Col>
-                    {/* <Card style={{ height: "75vh"}} >
-                        <Row className='pt-4'>
-                            <Col  md={3}>
-                                <div className='fs-4'>
-                                    <p className='pb-3'>GitHub Info</p>
-                                    <p className='pb-3'>專案名稱: {infoList.project_name}</p>
-                                    <p className='pb-3'>使用者: {infoList.github.owner}</p>
-                                    <p className='pb-3'>repo: {infoList.github.repo}</p>
-                                </div>
-                            </Col>
-                            <Col  md={9}>
-                                <div className='fs-4'>
-                                    <p className='pb-3'>Machine Info: </p>
-                                    <p className='pb-3'>類型: {infoList.machine.type}</p>
-                                    <p className='pb-3'>每秒價格{infoList.machine.price}</p>
-                                    <p className='pb-3'>狀態: {infoList.machine.status}</p>
-                                    <p className='pb-3'>租借時間: {infoList.time}</p>
-                                </div>
-                            </Col>
-                        </Row> */}
                     <Card>
                         <Container>
                             <Row xs={1} md={1} className="align-items-center" style={{height: '85vh'}} >
@@ -353,25 +353,25 @@ const MachineInformation = () => {
             </Row>
             <Toast show={showA} onClose={toggleShowA} className="position-absolute top-50 start-50 translate-middle" style={{  width:"60vw", maxWidth: "90vw", zIndex: "4" }}>
                 <Toast.Header>
-                    <strong className="me-auto">GitHub資訊更改</strong>
+                    <strong className="me-auto fs-3">GitHub 資訊更改</strong>
                 </Toast.Header>
-                <Form noValidate validated={validated} className= "bg-light">
+                <Form noValidate className= "bg-light">
                     <Form.Group as={Row} className="mb-1 p-4" controlId="owner">
-                        <Form.Label column sm="1">
+                        <Form.Label column sm="1" className="ps-2">
                             owner
                         </Form.Label>
                         <Col sm="10">
-                            <Form.Control required type="text" placeholder="請輸入 GitHub 擁有者"/>
-                            <Form.Control.Feedback type="invalid">user_project is a required field</Form.Control.Feedback>
+                            <Form.Control required type="text" placeholder="請輸入 GitHub 擁有者" className="ps-2"/>
+                            <Form.Control.Feedback id="feedback_owner" type="invalid">GitHub 擁有者不得空白</Form.Control.Feedback>
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row} className="mb-1 p-4" controlId="repo">
-                        <Form.Label column sm="1">
+                        <Form.Label column sm="1" className="ps-2">
                             repo
                         </Form.Label>
                         <Col sm="10" type="invalid">
-                            <Form.Control required type="text" placeholder="請輸入 GitHub 儲存庫名稱"/>
-                            <Form.Control.Feedback type="invalid">repo is a required field</Form.Control.Feedback>
+                            <Form.Control required type="text" placeholder="請輸入 GitHub Repo" className="ps-2"/>
+                            <Form.Control.Feedback id="feedback_repo" type="invalid">GitHub Repo 不得空白</Form.Control.Feedback>
                         </Col>
                     </Form.Group>
                     <Form.Group as={Row} className="mb-1 p-4" controlId="token">
@@ -379,18 +379,11 @@ const MachineInformation = () => {
                             Token
                         </Form.Label>
                         <Col sm="10">
-                            <Form.Control required type="text" placeholder="請輸入GitHubToken"/>
-                            <Form.Control.Feedback type="invalid">token is a required field</Form.Control.Feedback>
+                            <Form.Control required type="text" placeholder="請輸入 GitHub Token" className="ps-2" />
+                            <Form.Control.Feedback type="invalid">Token 有誤</Form.Control.Feedback>
                         </Col>
                     </Form.Group>
-                    <Form.Check
-                        required
-                        label="Agree to terms and conditions"
-                        feedback="You must agree before submitting."
-                        feedbackType="invalid"
-                        className='m-3'
-                    />
-                    <Button type="button" id="summit_button" onClick={() => handleSubmit()} className='mb-3 ms-4'>儲存並送出</Button>
+                    <Button type="button" size="lg" id="summit_button" onClick={() => handleSubmit()} className='mb-3 ms-4'>儲存並送出</Button>
                 </Form>
             </Toast>
         </Container>

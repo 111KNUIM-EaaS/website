@@ -13,4 +13,4 @@ const Information = () => {
         </Container>
     )
 }
-export default Information
+export default Information;

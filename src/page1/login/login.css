@@ -1,7 +1,7 @@
 .login { 
     background: 
         linear-gradient(290deg, #ffffff 50%, transparent 50%) center center,
-        url("/public/images/cleaner.jpg") left center / auto 100%;
+        url("/public/images/AGV.png") left center / auto 100%;
     ;
     background-size: cover;
     background-repeat: no-repeat;
@@ -13,7 +13,7 @@
 
 @media screen and (max-width:800px)  {
     .login { 
-        background-image: url("/public/images/cleaner.jpg");
+        background-image: url("/public/images/AGV.png");
         background-size: cover;
         background-repeat: no-repeat;
     }
