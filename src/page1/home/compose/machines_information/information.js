@@ -61,9 +61,9 @@ const MachineInformation = () => {
              .then(res => {
                 // console.log("🚀 ~ file: information.js:21 ~ useEffect ~ res data:", res.data);
                 const data = res.data;
-                console.log("🚀 ~ file: information.js:51 ~ getMachineInfo ~ data:", data)
-                setMachineInfo(data)
-                getGitHubOTAData(data.github.owner, data.github.repo);
+                console.log("🚀 ~ file: information.js:51 ~ getMachineInfo ~ data:", data);
+                setMachineInfo(data);
+                getGitHubOTAData(data.github.owner, data.github.repo, data.github.token);
              })
              .catch(err => {
                 console.log("information.js getMachineInfo err:", err);
@@ -106,14 +106,24 @@ const MachineInformation = () => {
         }
     }
     
-    const getGitHubOTAData = async (owner, repo) => {
+    const getGitHubOTAData = async (owner, repo, token) => {
         try {
+            // token !=== null
+            let headers;
+            if(token === null) {
+                headers = {
+                    'Accept': 'application/vnd.github+json'
+                }
+            } else {
+                headers = {
+                    'Accept': 'application/vnd.github+json',
+                    'Authorization': 'Bearer ' + token,
+                }
+            }
             const response = 
                 await fetch(`https://api.github.com/repos/${owner}/${repo}/releases`, {
                     method: 'GET',
-                    headers: {
-                        'Accept': 'application/vnd.github+json'
-                    },
+                    headers: headers
                 });
 
             const data = await response.json();
@@ -361,7 +371,7 @@ const MachineInformation = () => {
                             owner
                         </Form.Label>
                         <Col sm="10">
-                            <Form.Control required type="text" placeholder="請輸入 GitHub 擁有者" className="ps-2"/>
+                            <Form.Control required type="text" value={(machineInfo === undefined? "" : machineInfo.github.owner )} placeholder="請輸入 GitHub 擁有者" className="ps-2"/>
                             <Form.Control.Feedback id="feedback_owner" type="invalid">GitHub 擁有者不得空白</Form.Control.Feedback>
                         </Col>
                     </Form.Group>
@@ -370,7 +380,7 @@ const MachineInformation = () => {
                             repo
                         </Form.Label>
                         <Col sm="10" type="invalid">
-                            <Form.Control required type="text" placeholder="請輸入 GitHub Repo" className="ps-2"/>
+                            <Form.Control required type="text" value={(machineInfo === undefined? "" : machineInfo.github.repo )} placeholder="請輸入 GitHub Repo" className="ps-2"/>
                             <Form.Control.Feedback id="feedback_repo" type="invalid">GitHub Repo 不得空白</Form.Control.Feedback>
                         </Col>
                     </Form.Group>
