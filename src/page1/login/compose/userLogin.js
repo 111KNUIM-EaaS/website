@@ -7,9 +7,6 @@ import { authentication } from '../../../compose/firebase';
 import { DoorOpen } from 'react-bootstrap-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-
-
-
 function LogOut() { 
     authentication.signOut();
     window.location.href= "/";

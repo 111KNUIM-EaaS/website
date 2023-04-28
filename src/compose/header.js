@@ -18,15 +18,10 @@ function Header() {
     useEffect(() => {
         onAuthStateChanged(authentication, (user) => {
             setUser(user);           
-            console.log("🚀 ~ file: header.js:21 ~ onAuthStateChanged ~ user:", user)
-            if( user === null) {
-                if(window.location.pathname !== "/") {
-                    window.location.href = "/";
-                }
-            } else {
-                if(window.location.pathname === "/") {
-                    window.location.href = "/home/main";
-                }
+            // console.log("🚀 ~ file: header.js:21 ~ onAuthStateChanged ~ user:", user);
+
+            if( user === null && window.location.pathname !== "/") {
+                window.location.href = "/";
             }
         });
     }, []);
