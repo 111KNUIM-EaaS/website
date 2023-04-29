@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Card, Container, Row, Col, Nav, Navbar, Toast, Form, Button, DropdownButton, ButtonGroup, Dropdown, ListGroup} from "react-bootstrap"
 import { PlayBtn, PauseBtn, Trash, Hammer, Tag, FileEarmarkMedical } from "react-bootstrap-icons";
@@ -19,27 +19,8 @@ const MachineInformation = () => {
     const [githubReleasesList, setGithubReleasesList] = useState([]);
     
     const toggleShowA = () => setShowA(!showA);
-    
-    useEffect(() => {
-        const params = new URLSearchParams(window.location.search);
-        const value  = params.get('rid');
-        setRid(value);
 
-        onAuthStateChanged(authentication, (user) => {
-            setUser(user);
-        });
-    }, []);
-
-    useEffect(() => {
-        if (user) {
-            getMachineInfo(user.uid);
-            // setInterval(() => {
-            //     getMachineInfo(user.uid);
-            // }, 5000);
-        }
-    }, [user]);
-
-    const getMachineInfo = async(uid) => {
+    const getMachineInfo = useCallback( async(uid) => {
         // header
         const headers = {
             'Content-Type': 'application/json',
@@ -53,8 +34,7 @@ const MachineInformation = () => {
         }
 
         // axios
-        axios
-            .post(`http://${apiConf.host}:${apiConf.port}/api/machines/info`, data, { headers: headers })
+        axios.post(`http://${apiConf.host}:${apiConf.port}/api/machines/info`, data, { headers: headers })
              .then(res => {
                 // console.log("🚀 ~ file: information.js:21 ~ useEffect ~ res data:", res.data);
                 const data = res.data;
@@ -66,7 +46,18 @@ const MachineInformation = () => {
                 console.log("information.js getMachineInfo err:", err);
                 // window.location.href = "/home/state";
              });
-    }
+    }, [rid]);
+    
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const value  = params.get('rid');
+        setRid(value);
+
+        onAuthStateChanged(authentication, (user) => {
+            setUser(user);
+            getMachineInfo(user.uid);
+        });
+    }, [getMachineInfo]);
 
     const machineStatus = (status) => {
         // console.log("status:", status, user.uid);

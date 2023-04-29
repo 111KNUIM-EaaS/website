@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Container, Row, Col, Button, Card} from "react-bootstrap";
 import { authentication } from "../../../../compose/firebase";
 import { onAuthStateChanged } from "firebase/auth";
@@ -12,15 +12,26 @@ const State = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [machineList, setMachineList] = useState([]);
     const itemsPerPage = 3;
+
+    const getMachineList = useCallback((uid) => {
+        axios.post(`http://${apiConf.host}:${apiConf.port}/api/machines/state`, { uid: uid })
+            .then(res => {
+                // console.table("🚀 ~ file: state.js: 23 ~ useEffect ~ res data:", res.data.data);
+                setMachineList(res.data.data);
+            })
+            .catch(err => {
+                console.log("🚀 ~ file: state.js:21 ~ useEffect ~ err:", err)
+            });
+    }, []);
     
     useEffect(() => {
         onAuthStateChanged(authentication, (user) => {
-            console.log("🚀 ~ file: state.js:16 ~ onAuthStateChanged ~ user:", user);
+            // console.log("🚀 ~ file: state.js:16 ~ onAuthStateChanged ~ user:", user);
             setUser(user);
-            console.log("🚀 ~ file: state.js:19 ~ onAuthStateChanged ~ user.uid:", user.uid);
-            getMachineList();
+            // console.log("🚀 ~ file: state.js:19 ~ onAuthStateChanged ~ user.uid:", user.uid);
+            getMachineList(user.uid);
         });
-    }, [user]);
+    }, [user, getMachineList]);
     
     const totalPages = Math.ceil(machineList.length / itemsPerPage);
     
@@ -31,18 +42,6 @@ const State = () => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
     const currentItems = machineList.slice(startIndex, endIndex);
-
-    const getMachineList = () => {
-        axios
-        .post(`http://${apiConf.host}:${apiConf.port}/api/machines/state`, { uid: user.uid })
-        .then(res => {
-            console.table("🚀 ~ file: state.js: 23 ~ useEffect ~ res data:", res.data.data);
-            setMachineList(res.data.data);
-        })
-        .catch(err => {
-            console.log("🚀 ~ file: state.js:21 ~ useEffect ~ err:", err)
-        });
-    }
 
     const returnMachine = (rid) => {
         window.location.href = "/home/machine/information/?rid=" + rid;
@@ -64,8 +63,8 @@ const State = () => {
 
         axios.post(`http://${apiConf.host}:${apiConf.port}/api/machines/delete`, data, { headers: headers })
              .then(res => {
-                console.log("🚀 ~ file: machine.js:30 ~ handleBorrowTime ~ res:", res);
-                getMachineList();
+                // console.log("🚀 ~ file: machine.js:30 ~ handleBorrowTime ~ res:", res);
+                getMachineList(user.uid);
              })
              .catch(err => {
                 console.log("🚀 ~ file: machine.js:30 ~ handleBorrowTime ~ err:", err);

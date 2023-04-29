@@ -2,7 +2,7 @@ import React  from 'react';
 import { useLocation } from 'react-router-dom';
 import { Nav, Navbar } from 'react-bootstrap';
 import Offcanvas from 'react-bootstrap/Offcanvas';
-import { HouseFill, Clipboard2Plus, Receipt, HddStack, Github } from 'react-bootstrap-icons';
+import { HouseFill, Clipboard2Plus, HddStack, Github } from 'react-bootstrap-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../home.css'
 function Sidebar({ show, handleClose }) {

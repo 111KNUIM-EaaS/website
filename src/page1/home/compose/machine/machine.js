@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Container, Row, Col, Card, Button, Toast, Form } from "react-bootstrap";
 import { authentication } from "../../../../compose/firebase";
 import { onAuthStateChanged } from "firebase/auth";
@@ -18,29 +18,8 @@ const Machine = () => {
     const [typeID,          setTypeID           ] = useState(0);
     const [machineTypeList, setMachineTypeList  ] = useState(undefined);
 
-    useEffect(() => {
-        onAuthStateChanged(authentication, (user) => {
-            // console.log("🚀 ~ file: header.js:15 ~ onAuthStateChanged ~ user:", user)
-            setUser(user);
-            // console.log("🚀 ~ file: header.js:15 ~ onAuthStateChanged ~ user.uid:", user.uid)
-
-        });
-
-        getMachineList();
-        setInterval(getMachineList, 5000); // 5 seconds
-    }, []);
-
-    const toggleShowA = (id) => {
-        // set the window to the top of the page
-        window.scrollTo(0, 0);
-
-        // console.log("🚀 ~ file: machine.js:14 ~ toggleShowA ~ id:", id)
-        setTypeID(id);
-        setShowA(!showA);
-    };
-
     // Get machine list
-    const getMachineList = () => {
+    const getMachineList = useCallback(() => {
         axios.get(`http://${apiConf.host}:${apiConf.port}/api/machines/list`)
             .then(res => {
                 if(machineTypeList === undefined) {
@@ -52,7 +31,27 @@ const Machine = () => {
             .catch(err => {
                 console.log("🚀 ~ file: machine.js:21 ~ useEffect ~ err:", err)
             });
-    }
+    }, [machineTypeList]);
+
+    useEffect(() => {
+        onAuthStateChanged(authentication, (user) => {
+            // console.log("🚀 ~ file: header.js:15 ~ onAuthStateChanged ~ user:", user)
+            setUser(user);
+            // console.log("🚀 ~ file: header.js:15 ~ onAuthStateChanged ~ user.uid:", user.uid)
+
+        });
+
+        getMachineList();
+    }, [getMachineList]);
+
+    const toggleShowA = (id) => {
+        // set the window to the top of the page
+        window.scrollTo(0, 0);
+
+        // console.log("🚀 ~ file: machine.js:14 ~ toggleShowA ~ id:", id)
+        setTypeID(id);
+        setShowA(!showA);
+    };
 
     // Compare two arrays
     const areArraysEqual = (arr1, arr2) => {
@@ -171,7 +170,7 @@ const Machine = () => {
                     ))
                 ) : (
                     imgList.map((img, index) => (   
-                        <Col className="m-5 p-4" style={{ border: "0", userSelect: "none" }}>
+                        <Col key={index} className="m-5 p-4" style={{ border: "0", userSelect: "none" }}>
                             <Card className="h-100">
                                 <Card.Header className="p-3 rounded-4" style={{  }}>
                                     <img key={index} src={img.src} alt="img" height={img.height} width={img.width} style={{ opacity: "0.5" }}/>
