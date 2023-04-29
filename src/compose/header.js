@@ -15,6 +15,7 @@ let icons =  [
 
 function Header() {    
     const [user, setUser] = useState(null);
+
     useEffect(() => {
         onAuthStateChanged(authentication, (user) => {
             setUser(user);           

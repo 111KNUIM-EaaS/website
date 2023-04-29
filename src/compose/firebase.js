@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
-import firebaseConfig from '../conf/firebaseConfig.json' 
+import firebaseConfig from '../conf/firebaseConfig.json'
 import axios from 'axios';
 import apiConf from '../conf/apiConf.json';
 
