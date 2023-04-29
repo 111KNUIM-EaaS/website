@@ -20,7 +20,7 @@ const MachineInformation = () => {
     
     const toggleShowA = () => setShowA(!showA);
 
-    const getMachineInfo = useCallback( async(uid) => {
+    const getMachineInfo = useCallback( async(uid, rid) => {
         // header
         const headers = {
             'Content-Type': 'application/json',
@@ -38,7 +38,7 @@ const MachineInformation = () => {
              .then(res => {
                 // console.log("🚀 ~ file: information.js:21 ~ useEffect ~ res data:", res.data);
                 const data = res.data;
-                console.log("🚀 ~ file: information.js:51 ~ getMachineInfo ~ data:", data);
+                // console.log("🚀 ~ file: information.js:51 ~ getMachineInfo ~ data:", data);
                 setMachineInfo(data);
                 getGitHubOTAData(data.github.owner, data.github.repo, data.github.token);
              })
@@ -46,7 +46,7 @@ const MachineInformation = () => {
                 console.log("information.js getMachineInfo err:", err);
                 // window.location.href = "/home/state";
              });
-    }, [rid]);
+    }, []);
     
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
@@ -55,7 +55,7 @@ const MachineInformation = () => {
 
         onAuthStateChanged(authentication, (user) => {
             setUser(user);
-            getMachineInfo(user.uid);
+            getMachineInfo(user.uid, value);
         });
     }, [getMachineInfo]);
 
@@ -76,22 +76,22 @@ const MachineInformation = () => {
         axios.post(`http://${apiConf.host}:${apiConf.port}/api/machines/update_status`, data, { headers: headers })
             .then(res => {
                 console.log("machineStatus data:", res.data);
-                getMachineInfo(user.uid);
+                getMachineInfo(user.uid, rid);
+                
+                if (status === 1) {
+                    console.log("status: running");
+                } else if (status === 3) {
+                    console.log("status: stop ");
+                } else if (status === 0) {
+                    console.log("status: pause");
+                    window.location.href = "/home/state";
+                }
             })
             .catch(err => {
                 console.log("information.js machineStatus err:", err);
                 
             }
         );
-
-        if (status === 1) {
-            console.log("status: running");
-        } else if (status === 3) {
-            console.log("status: stop ");
-        } else if (status === 0) {
-            console.log("status: pause");
-            window.location.href = "/home/state";
-        }
     }
     
     const getGitHubOTAData = async (owner, repo, token) => {
@@ -120,7 +120,7 @@ const MachineInformation = () => {
                 console.log("gitHubOTAData:", data);
                 setBodyInfo("GitHub 取得資料失敗，請更新 owner(專案擁有者), repo(專案名稱), token(權限)")
             } else {
-                console.log("gitHubOTAData:", data);
+                // console.log("gitHubOTAData:", data);
                 setGithubReleasesList(data);
                 setGitHubOTAData(data[0]);
             }
@@ -182,7 +182,7 @@ const MachineInformation = () => {
             axios.post(`http://${apiConf.host}:${apiConf.port}/api/machines/update_info`, data, { headers: headers })
                 .then(res => {
                     console.log("information.js handleSubmit:", res);
-                    getMachineInfo(user.uid);
+                    getMachineInfo(user.uid, rid);
                     toggleShowA();
                 })
                 .catch(err => {
@@ -219,7 +219,7 @@ const MachineInformation = () => {
         axios.post(`http://${apiConf.host}:${apiConf.port}/api/machines/ota`, data, { headers: headers })
              .then(res => {
                 console.log("information.js handleButtonClick res:", res.data);
-                getMachineInfo(user.uid);
+                getMachineInfo(user.uid, rid);
              })
              .catch(err => {
                 console.log("information.js handleButtonClick err:", err);
