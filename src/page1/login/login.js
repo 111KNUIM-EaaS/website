@@ -1,7 +1,8 @@
-import { Container, Row, Col} from "react-bootstrap"
+import React from 'react';
+import { Container, Row, Col} from "react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import LoginCard from "./compose/card";
-import './login.css'
+import './login.css';
 
 const Login = () => {
     return (
@@ -15,4 +16,4 @@ const Login = () => {
     );
 }
 
-export default Login
+export default Login;

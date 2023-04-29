@@ -25,6 +25,7 @@ const Bill = () => {
                 });
         });
     }, []);
+    
 
     console.log("🚀 ~ file: bill.js:20 ~ Bill ~ billData", billData);
 
