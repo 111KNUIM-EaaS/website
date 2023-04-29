@@ -363,7 +363,7 @@ const MachineInformation = () => {
             </Row>
             <Toast show={showA} onClose={toggleShowA} className="position-absolute top-50 start-50 translate-middle" style={{  width:"60vw", maxWidth: "90vw", zIndex: "4" }}>
                 <Toast.Header>
-                    <strong className="me-auto fs-3">GitHub 資訊更改</strong>
+                    <strong className="me-auto fs-3">更改客製化機具產線參數</strong>
                 </Toast.Header>
                 <Form noValidate className= "bg-light">
                     <Form.Group as={Row} className="mb-1 p-4" controlId="owner">
@@ -371,7 +371,7 @@ const MachineInformation = () => {
                             owner
                         </Form.Label>
                         <Col sm="10">
-                            <Form.Control required type="text" value={(machineInfo === undefined? "" : machineInfo.github.owner )} placeholder="請輸入 GitHub 擁有者" className="ps-2"/>
+                            <Form.Control required type="text" placeholder={`請輸入 GitHub 擁有者 (${machineInfo === undefined? "" : machineInfo.github.owner})`} className="ps-2"/>
                             <Form.Control.Feedback id="feedback_owner" type="invalid">GitHub 擁有者不得空白</Form.Control.Feedback>
                         </Col>
                     </Form.Group>
@@ -380,7 +380,7 @@ const MachineInformation = () => {
                             repo
                         </Form.Label>
                         <Col sm="10" type="invalid">
-                            <Form.Control required type="text" value={(machineInfo === undefined? "" : machineInfo.github.repo )} placeholder="請輸入 GitHub Repo" className="ps-2"/>
+                            <Form.Control required type="text" placeholder={`請輸入 GitHub Repo (${machineInfo === undefined? "" : machineInfo.github.repo})`} className="ps-2"/>
                             <Form.Control.Feedback id="feedback_repo" type="invalid">GitHub Repo 不得空白</Form.Control.Feedback>
                         </Col>
                     </Form.Group>

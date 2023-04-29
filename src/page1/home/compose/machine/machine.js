@@ -192,7 +192,7 @@ const Machine = () => {
             
             <Toast show={showA} onClose={toggleShowA} className="position-absolute top-50 start-50 translate-middle fs-5" style={{  width:"60vw", maxWidth: "90vw", zIndex: "4" }}>
                 <Toast.Header className="bg-dark text-white">
-                    <strong className="me-auto">EaaS 雲端專案建立</strong>
+                    <strong className="me-auto fs-3">客製化機具產線參數</strong>
                 </Toast.Header>
                 <Form noValidate className= "bg-light">
                     <Form.Group as={Row} className="mb-1 p-4" controlId="user_project">
