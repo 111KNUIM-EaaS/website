@@ -9,7 +9,6 @@ import apiConf from '../../../../conf/apiConf.json'
 
 const State = () => {
     const [user, setUser] = useState(null);
-    const [returnTime, setReturnTime ] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const [machineList, setMachineList] = useState([]);
     const itemsPerPage = 3;

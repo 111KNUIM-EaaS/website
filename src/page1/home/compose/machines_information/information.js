@@ -14,7 +14,6 @@ const MachineInformation = () => {
     const [user,               setUser              ] = useState(null);
     const [showA,              setShowA             ] = useState(false);
     const [bodyInfo,           setBodyInfo          ] = useState("");
-    const [validated,          setValidated         ] = useState(false);
     const [machineInfo,        setMachineInfo       ] = useState(undefined);
     const [gitHubOTAData,      setGitHubOTAData     ] = useState(undefined);
     const [githubReleasesList, setGithubReleasesList] = useState([]);
@@ -22,8 +21,6 @@ const MachineInformation = () => {
     const toggleShowA = () => setShowA(!showA);
     
     useEffect(() => {
-        setValidated(false);
-
         const params = new URLSearchParams(window.location.search);
         const value  = params.get('rid');
         setRid(value);

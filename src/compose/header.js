@@ -32,7 +32,7 @@ function Header() {
             <Navbar.Brand className="px-3">
             <a href="/home/main" style={{ textDecoration: "none" }}>
                 <img className="pb-2"
-                    alt="Eaas"
+                    alt="EaaS"
                     src={('/images/PCB.png')}
                     height={40}
                 />
