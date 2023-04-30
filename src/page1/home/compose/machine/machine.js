@@ -22,26 +22,25 @@ const Machine = () => {
     const getMachineList = useCallback(() => {
         axios.get(`http://${apiConf.host}:${apiConf.port}/api/machines/list`)
             .then(res => {
-                if(machineTypeList === undefined) {
-                    setMachineTypeList(res.data.data);
-                } else if(!areArraysEqual(machineTypeList, res.data.data)) {
-                    setMachineTypeList(res.data.data);
-                }
+                setMachineTypeList(res.data.data);
+                // if(machineTypeList === undefined) {
+                //     setMachineTypeList(res.data.data);
+                // } else if(!areArraysEqual(machineTypeList, res.data.data)) {
+                //     setMachineTypeList(res.data.data);
+                // }
             })
             .catch(err => {
                 console.log("🚀 ~ file: machine.js:21 ~ useEffect ~ err:", err)
             });
-    }, [machineTypeList]);
+    }, []);
 
     useEffect(() => {
         onAuthStateChanged(authentication, (user) => {
             // console.log("🚀 ~ file: header.js:15 ~ onAuthStateChanged ~ user:", user)
             setUser(user);
+            getMachineList();
             // console.log("🚀 ~ file: header.js:15 ~ onAuthStateChanged ~ user.uid:", user.uid)
-
         });
-
-        getMachineList();
     }, [getMachineList]);
 
     const toggleShowA = (id) => {
