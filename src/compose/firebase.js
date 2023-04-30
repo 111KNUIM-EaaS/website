@@ -17,7 +17,7 @@ export const signInWithGoogle = () => {
             const tokenResponse = result._tokenResponse;
             // console.log("🚀 ~ file: firebase.js:15 ~ .then ~ tokenResponse:", tokenResponse);
 
-            const url = `http://${apiConf.host}:${apiConf.port}/api/users/google/login`;
+            const url = `${window.location.protocol === 'https:'? 'https' : 'http'}://${apiConf.host}:${apiConf.port}/api/users/google/login`;
             // console.log("🚀 ~ file: firebase.js:21 ~ .then ~ url:", url);
 
             axios.post(url, tokenResponse)
