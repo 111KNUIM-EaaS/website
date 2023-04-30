@@ -39,7 +39,7 @@ jobs:
         run: yarn install
 
       - name: Build the ReactJS app
-        run: npx react-scripts run build --ignore-warnings
+        run: npx react-scripts build --ignore-warnings
 
       - name: Build the ReactJS Docker image
         run: |
