@@ -36,6 +36,9 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
+        run: yarn install
+
+      - name: Build the ReactJS app
         run: npx react-scripts run build --ignore-warnings
 
       - name: Build the ReactJS Docker image
