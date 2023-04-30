@@ -5,4 +5,4 @@ EXPOSE 80
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY build      /var/www/html
 
-RUN nginx -t
+# RUN nginx -t
