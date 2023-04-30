@@ -52,14 +52,14 @@ const Machine = () => {
         setShowA(!showA);
     };
 
-    // Compare two arrays
-    const areArraysEqual = (arr1, arr2) => {
-        if (arr1.length !== arr2.length) {
-            return false;
-        }
+    // // Compare two arrays
+    // const areArraysEqual = (arr1, arr2) => {
+    //     if (arr1.length !== arr2.length) {
+    //         return false;
+    //     }
 
-        return arr1.every((val, index) => val === arr2[index]);
-    };
+    //     return arr1.every((val, index) => val === arr2[index]);
+    // };
 
     const handleSubmit = (event) => {
         // Get user information
