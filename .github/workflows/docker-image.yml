@@ -41,8 +41,8 @@ jobs:
 
       - name: Update Nginx config
         run: |
-          sed -i 's|ssl_certificate     www.example.com.crt;|ssl_certificate ${CERTIFICATE};|g' nginx.conf
-          sed -i 's|ssl_certificate_key www.example.com.key;|ssl_certificate_key ${CERTIFICATE_KEY};|g' nginx.conf
+          sed -i 's|ssl_certificate     www.example.com.crt;|ssl_certificate ${{ secrets.CERTIFICATE }};|g' nginx.conf
+          sed -i 's|ssl_certificate_key www.example.com.key;|ssl_certificate_key ${{ secrets.CERTIFICATE_KEY }};|g' nginx.conf
 
       - name: Build the ReactJS Docker image
         run: |
