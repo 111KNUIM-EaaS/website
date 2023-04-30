@@ -1,16 +1,8 @@
-FROM node:18.14.2-slim
+FROM nginx:latest
 
-EXPOSE 3000
+EXPOSE 80
 
-RUN npm install -g create-react-app
+COPY nginx.conf /etc/nginx/nginx.conf
+COPY build      /var/www/html
 
-COPY /public /home/node/website/public
-COPY /src /home/node/website/src
-COPY /package.json /home/node/website/package.json
-COPY /yarn.lock /home/node/website/yarn.lock
-
-WORKDIR /home/node/website
-
-RUN yarn install
-
-CMD [ "yarn", "start" ]
+RUN nginx -t

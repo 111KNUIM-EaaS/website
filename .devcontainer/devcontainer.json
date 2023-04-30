@@ -1,5 +1,5 @@
 {
-	"name": "EaaS website ReactJS",
+	"name": "EaaS website Nginx Test",
 	"build": {
         "dockerfile": "Dockerfile"
     },

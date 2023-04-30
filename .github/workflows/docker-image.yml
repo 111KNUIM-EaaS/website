@@ -2,7 +2,8 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "master", "devcontainer" ]
+    tags:
+      - 'v*'
 
 jobs:
   build:
@@ -26,9 +27,20 @@ jobs:
           fileDir: './src/conf/'
           encodedString: ${{ secrets.APICONF }}
 
+
+      - uses: actions/checkout@v3
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm run build --ignore-warnings
+
       - name: Build the ReactJS Docker image
         run: |
-          TAG=$(date +%s)
+          TAG=$(git describe --tags)
           docker build . --file Dockerfile --tag ${{ secrets.DOCKER_NAME }}:${TAG}
           docker save ${{ secrets.DOCKER_NAME }}:${TAG} > ${{ secrets.DOCKER_NAME }}.tar
 
