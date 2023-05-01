@@ -43,6 +43,7 @@ const MachineInformation = () => {
                 getGitHubOTAData(data.github.owner, data.github.repo, data.github.token);
              })
              .catch(err => {
+                window.location.href = "/home/state";
                 console.log("information.js getMachineInfo err:", err);
                 // window.location.href = "/home/state";
              });

@@ -110,7 +110,7 @@ const Machine = () => {
             };
             console.log("🚀 ~ file: machine.js:30 ~ handleBorrowTime ~ headers:", headers);
 
-            axios.post(`${apiConf.URL || "" }/api/machines/borrow_state`, data, { headers: headers })
+            axios.post(`${apiConf.URL || "" }/api/machines/borrow/state`, data, { headers: headers })
                 .then(res => {
                     console.log("🚀 ~ file: machine.js:30 ~ handleBorrowTime ~ res:", res);
                     window.location.href = "/home/state";
