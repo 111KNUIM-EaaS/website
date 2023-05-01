@@ -189,7 +189,7 @@ const MachineInformation = () => {
                     };
                     // console.log("🚀 ~ file: information.js:21 ~ useEffect ~ res data:", data);
                     
-                    axios.post(`http://${apiConf.host}:${apiConf.port}/api/machines/update/info`, data, { headers: headers })
+                    axios.post(`${apiConf.URL || "" }/api/machines/update/info`, data, { headers: headers })
                         .then(res => {
                             console.log("information.js handleSubmit:", res);
                             getMachineInfo(user.uid, rid);
@@ -228,7 +228,7 @@ const MachineInformation = () => {
                     'Authorization': idToken
                 };
 
-                axios.post(`http://${apiConf.host}:${apiConf.port}/api/machines/ota`, data, { headers: headers })
+                axios.post(`${apiConf.URL || "" }/api/machines/ota`, data, { headers: headers })
                     .then(res => {
                         console.log("information.js handleButtonClick res:", res.data);
                         getMachineInfo(user.uid, rid);
