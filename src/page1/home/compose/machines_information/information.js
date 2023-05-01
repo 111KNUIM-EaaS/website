@@ -74,7 +74,7 @@ const MachineInformation = () => {
             status: status
         };
 
-        axios.post(`${apiConf.URL || "" }/api/machines/update_status`, data, { headers: headers })
+        axios.post(`${apiConf.URL || "" }/api/machines/update/status`, data, { headers: headers })
             .then(res => {
                 console.log("machineStatus data:", res.data);
                 getMachineInfo(user.uid, rid);
@@ -180,7 +180,7 @@ const MachineInformation = () => {
             };
             // console.log("🚀 ~ file: information.js:21 ~ useEffect ~ res data:", data);
             
-            axios.post(`http://${apiConf.host}:${apiConf.port}/api/machines/update_info`, data, { headers: headers })
+            axios.post(`http://${apiConf.host}:${apiConf.port}/api/machines/update/info`, data, { headers: headers })
                 .then(res => {
                     console.log("information.js handleSubmit:", res);
                     getMachineInfo(user.uid, rid);
