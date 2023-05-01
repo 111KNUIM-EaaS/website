@@ -41,13 +41,19 @@ function Header() {
                     axios.post(`${apiConf.URL || "" }/api/users/google/login`, data, { headers: headers })
                         .then(res => {
                             // console.log(`[L][${(new Date()).toLocaleString()}]📝 header.js[/api/users/google/login] 🔊 res data:`, res.data);
-                            if( window.location.pathname === "/" ) {
+                            if( res.status === 200 && window.location.pathname === "/" ) {
                                 window.location.href = "/home/main";
+                            }
+
+                            if( res.status !== 200 ) {
+                                authentication.signOut();
+                                window.location.href = "/";
                             }
                         })
                         .catch(err => {
                             console.error(`[E][${(new Date()).toLocaleString()}]📝 header.js[/api/users/google/login] 🔊 res Error:`, err);
-                            // window.location.reload();
+                            authentication.signOut();
+                            window.location.href = "/";
                         });
                 });
             }
