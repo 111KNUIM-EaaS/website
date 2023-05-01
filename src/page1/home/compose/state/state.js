@@ -49,27 +49,30 @@ const State = () => {
 
     const delMachine = (rid) => {
         console.log("🚀 ~ file: state.js:66 ~ delMachine ~ rid:", rid);
-        const data = {  // data to send to backend
-            rid: rid
-        };
-        // console.log("🚀 ~ file: machine.js:30 ~ handleBorrowTime ~ data:", data);
-        
-        const headers = {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-            'User': user.uid,
-        };
-        // console.log("🚀 ~ file: machine.js:30 ~ handleBorrowTime ~ headers:", headers);
+        if (user !== null) {
+            user.getIdToken().then((idToken) => {
+                const data = {  // data to send to backend
+                    rid: rid
+                };
+                
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'User': user.uid,
+                    'Authorization': idToken
+                };
 
-        axios.post(`${apiConf.URL || "" }/api/machines/delete`, data, { headers: headers })
-             .then(res => {
-                // console.log("🚀 ~ file: machine.js:30 ~ handleBorrowTime ~ res:", res);
-                getMachineList(user.uid);
-             })
-             .catch(err => {
-                console.log("🚀 ~ file: machine.js:30 ~ handleBorrowTime ~ err:", err);
-                window.location.reload();
-             });
+                axios.post(`${apiConf.URL || "" }/api/machines/delete`, data, { headers: headers })
+                    .then(res => {
+                        // console.log("🚀 ~ file: machine.js:30 ~ handleBorrowTime ~ res:", res);
+                        getMachineList(user.uid);
+                    })
+                    .catch(err => {
+                        console.log("🚀 ~ file: machine.js:30 ~ handleBorrowTime ~ err:", err);
+                        window.location.reload();
+                    });
+            });
+        }
     }
 
     return (

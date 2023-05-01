@@ -22,32 +22,35 @@ const MachineInformation = () => {
 
     const getMachineInfo = useCallback( async(uid, rid) => {
         // header
-        const headers = {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-            'User': uid
-        };
+        if(user !== null) {
+            user.getIdToken().then((idToken) => {
+                const data = {
+                    rid: rid,
+                };
 
-        // data
-        const data = {
-            rid: rid,
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'User': user.uid,
+                    'Authorization': idToken
+                };
+
+                axios.post(`${apiConf.URL || "" }/api/machines/info`, data, { headers: headers })
+                .then(res => {
+                   // console.log("🚀 ~ file: information.js:21 ~ useEffect ~ res data:", res.data);
+                   const data = res.data;
+                   // console.log("🚀 ~ file: information.js:51 ~ getMachineInfo ~ data:", data);
+                   setMachineInfo(data);
+                   getGitHubOTAData(data.github.owner, data.github.repo, data.github.token);
+                })
+                .catch(err => {
+                   window.location.href = "/home/state";
+                   console.log("information.js getMachineInfo err:", err);
+                   // window.location.href = "/home/state";
+                });
+            });
         }
-
-        // axios
-        axios.post(`${apiConf.URL || "" }/api/machines/info`, data, { headers: headers })
-             .then(res => {
-                // console.log("🚀 ~ file: information.js:21 ~ useEffect ~ res data:", res.data);
-                const data = res.data;
-                // console.log("🚀 ~ file: information.js:51 ~ getMachineInfo ~ data:", data);
-                setMachineInfo(data);
-                getGitHubOTAData(data.github.owner, data.github.repo, data.github.token);
-             })
-             .catch(err => {
-                window.location.href = "/home/state";
-                console.log("information.js getMachineInfo err:", err);
-                // window.location.href = "/home/state";
-             });
-    }, []);
+    }, [user]);
     
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
@@ -62,38 +65,41 @@ const MachineInformation = () => {
 
     const machineStatus = (status) => {
         // console.log("status:", status, user.uid);
+        if(user !== null) {
+            user.getIdToken().then((idToken) => {
+                const data = {
+                    rid: rid,
+                    status: status
+                };
 
-        const headers = {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-            'User': user.uid
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'User': user.uid,
+                    'Authorization': idToken
+                };
+        
+                axios.post(`${apiConf.URL || "" }/api/machines/update/status`, data, { headers: headers })
+                    .then(res => {
+                        console.log("machineStatus data:", res.data);
+                        getMachineInfo(user.uid, rid);
+                        
+                        if (status === 1) {
+                            console.log("status: running");
+                        } else if (status === 3) {
+                            console.log("status: stop ");
+                        } else if (status === 0) {
+                            console.log("status: pause");
+                            window.location.href = "/home/state";
+                        }
+                    })
+                    .catch(err => {
+                        console.log("information.js machineStatus err:", err);
+                        
+                    });
+            });
         };
-
-        const data = {
-            rid: rid,
-            status: status
-        };
-
-        axios.post(`${apiConf.URL || "" }/api/machines/update/status`, data, { headers: headers })
-            .then(res => {
-                console.log("machineStatus data:", res.data);
-                getMachineInfo(user.uid, rid);
-                
-                if (status === 1) {
-                    console.log("status: running");
-                } else if (status === 3) {
-                    console.log("status: stop ");
-                } else if (status === 0) {
-                    console.log("status: pause");
-                    window.location.href = "/home/state";
-                }
-            })
-            .catch(err => {
-                console.log("information.js machineStatus err:", err);
-                
-            }
-        );
-    }
+    };
     
     const getGitHubOTAData = async (owner, repo, token) => {
         try {
@@ -124,13 +130,13 @@ const MachineInformation = () => {
                 // console.log("gitHubOTAData:", data);
                 setGithubReleasesList(data);
                 setGitHubOTAData(data[0]);
-            }
+            };
         }
         catch (error) {
             console.log(`[https://api.github.com/repos/${owner}/${repo}/releases]error:`, error);
             setBodyInfo("GitHub 取得資料失敗，請更新 owner(專案擁有者), repo(專案名稱), token(權限)")
-        }
-    }
+        };
+    };
 
     const icon_list = [
         {icon: <PlayBtn  size={30} className='success' />, name: <span className='success'>運行</span>,function: () => machineStatus(1)},
@@ -166,30 +172,35 @@ const MachineInformation = () => {
                 token_value = null;
             }
 
-            const data = {
-                rid: rid,
-                owner: owner_value,
-                repo:  repo_value,
-                token: token_value
-            };
-
-            const headers = {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*',
-                'User': user.uid,
-            };
-            // console.log("🚀 ~ file: information.js:21 ~ useEffect ~ res data:", data);
-            
-            axios.post(`http://${apiConf.host}:${apiConf.port}/api/machines/update/info`, data, { headers: headers })
-                .then(res => {
-                    console.log("information.js handleSubmit:", res);
-                    getMachineInfo(user.uid, rid);
-                    toggleShowA();
-                })
-                .catch(err => {
-                    console.log("information.js handleSubmit err:", err);
+            if( user !== null ) {
+                user.getIdToken().then((idToken) => {
+                    const data = {
+                        rid: rid,
+                        owner: owner_value,
+                        repo:  repo_value,
+                        token: token_value
+                    };
+        
+                    const headers = {
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*',
+                        'User': user.uid,
+                        'Authorization': idToken
+                    };
+                    // console.log("🚀 ~ file: information.js:21 ~ useEffect ~ res data:", data);
+                    
+                    axios.post(`http://${apiConf.host}:${apiConf.port}/api/machines/update/info`, data, { headers: headers })
+                        .then(res => {
+                            console.log("information.js handleSubmit:", res);
+                            getMachineInfo(user.uid, rid);
+                            toggleShowA();
+                        })
+                        .catch(err => {
+                            console.log("information.js handleSubmit err:", err);
+                        });
                 });
-        }
+            };
+        };
     };
 
 
@@ -199,34 +210,35 @@ const MachineInformation = () => {
     };
 
     function handleButtonClick(type, file) {
-        // header
-        const headers = {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-            'User': user.uid,
+        if( user !== null ) {
+            user.getIdToken().then((idToken) => {
+                const data = {
+                    rid: rid,
+                    firmware: {
+                        name: file.name,
+                        url: file.browser_download_url,
+                        tag: gitHubOTAData.tag_name,
+                    }
+                };
+
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'User': user.uid,
+                    'Authorization': idToken
+                };
+
+                axios.post(`http://${apiConf.host}:${apiConf.port}/api/machines/ota`, data, { headers: headers })
+                    .then(res => {
+                        console.log("information.js handleButtonClick res:", res.data);
+                        getMachineInfo(user.uid, rid);
+                    })
+                    .catch(err => {
+                        console.log("information.js handleButtonClick err:", err);
+                    });
+            });
         };
-
-        // data
-        const data = {
-            rid: rid,
-            firmware: {
-                name: file.name,
-                url: file.browser_download_url,
-                tag: gitHubOTAData.tag_name,
-            }
-        }
-
-        // axios
-        axios.post(`http://${apiConf.host}:${apiConf.port}/api/machines/ota`, data, { headers: headers })
-             .then(res => {
-                console.log("information.js handleButtonClick res:", res.data);
-                getMachineInfo(user.uid, rid);
-             })
-             .catch(err => {
-                console.log("information.js handleButtonClick err:", err);
-                // window.location.reload();
-             });
-    }
+    };
 
     return (
         <Container fluid style={{ position: 'relative', height: "95vh" }}>

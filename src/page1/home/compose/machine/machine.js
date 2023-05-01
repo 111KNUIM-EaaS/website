@@ -93,33 +93,36 @@ const Machine = () => {
             if(token_value <= 0) {
                 token_value = null;
             }
+            if( user !== null ) {
+                user.getIdToken().then((idToken) => {
+                    const data = {  // data to send to backend
+                        type_id: typeID,
+                        user_project: user_project,
+                        user_name: user_name_value,
+                        repo: repo_value,
+                        token: token_value
+                    };
 
-            const data = {  // data to send to backend
-                type_id: typeID,
-                user_project: user_project,
-                user_name: user_name_value,
-                repo: repo_value,
-                token: token_value
-            };
-            // console.log("🚀 ~ file: machine.js:30 ~ handleBorrowTime ~ data:", data);
-            
-            const headers = {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*',
-                'User': user.uid,
-            };
-            console.log("🚀 ~ file: machine.js:30 ~ handleBorrowTime ~ headers:", headers);
+                    const headers = {
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*',
+                        'User': user.uid,
+                        'Authorization': idToken
+                    };
+                    // console.log("🚀 ~ file: machine.js:30 ~ handleBorrowTime ~ headers:", headers);
 
-            axios.post(`${apiConf.URL || "" }/api/machines/borrow/state`, data, { headers: headers })
-                .then(res => {
-                    console.log("🚀 ~ file: machine.js:30 ~ handleBorrowTime ~ res:", res);
-                    window.location.href = "/home/state";
-                })
-                .catch(err => {
-                    console.log("🚀 ~ file: machine.js:30 ~ handleBorrowTime ~ err:", err);
-                    window.location.reload();
+                    axios.post(`${apiConf.URL || "" }/api/machines/borrow/state`, data, { headers: headers })
+                        .then(res => {
+                            console.log("🚀 ~ file: machine.js:30 ~ handleBorrowTime ~ res:", res);
+                            window.location.href = "/home/state";
+                        })
+                        .catch(err => {
+                            console.log("🚀 ~ file: machine.js:30 ~ handleBorrowTime ~ err:", err);
+                            window.location.reload();
+                        });
                 });
-        }
+            };
+        };
     };
 
     return (
