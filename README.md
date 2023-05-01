@@ -13,8 +13,6 @@
 3. search machine status
 4. search more infomation machine status
 
-## 
-
 ## Login Page
 <image src="https://cdn.discordapp.com/attachments/631421586729074698/1101815429447548978/image.png"></image>
 
