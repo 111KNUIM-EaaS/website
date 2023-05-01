@@ -14,7 +14,7 @@ const State = () => {
     const itemsPerPage = 3;
 
     const getMachineList = useCallback((uid) => {
-        axios.post(`${window.location.protocol === 'https:'? 'https' : 'http'}://${apiConf.host}:${apiConf.port}/api/machines/state`, { uid: uid })
+        axios.post(`${apiConf.URL || "" }/api/machines/state`, { uid: uid })
             .then(res => {
                 // console.table("🚀 ~ file: state.js: 23 ~ useEffect ~ res data:", res.data.data);
                 setMachineList(res.data.data);
@@ -61,7 +61,7 @@ const State = () => {
         };
         // console.log("🚀 ~ file: machine.js:30 ~ handleBorrowTime ~ headers:", headers);
 
-        axios.post(`${window.location.protocol === 'https:'? 'https' : 'http'}://${apiConf.host}:${apiConf.port}/api/machines/delete`, data, { headers: headers })
+        axios.post(`${apiConf.URL || "" }/api/machines/delete`, data, { headers: headers })
              .then(res => {
                 // console.log("🚀 ~ file: machine.js:30 ~ handleBorrowTime ~ res:", res);
                 getMachineList(user.uid);

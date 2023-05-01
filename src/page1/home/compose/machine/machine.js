@@ -20,7 +20,7 @@ const Machine = () => {
 
     // Get machine list
     const getMachineList = useCallback(() => {
-        axios.get(`${window.location.protocol === 'https:'? 'https' : 'http'}://${apiConf.host}:${apiConf.port}/api/machines/list`)
+        axios.get(`${apiConf.URL || "" }/api/machines/list`)
             .then(res => {
                 setMachineTypeList(res.data.data);
                 // if(machineTypeList === undefined) {
@@ -110,7 +110,7 @@ const Machine = () => {
             };
             console.log("🚀 ~ file: machine.js:30 ~ handleBorrowTime ~ headers:", headers);
 
-            axios.post(`${window.location.protocol === 'https:'? 'https' : 'http'}://${apiConf.host}:${apiConf.port}/api/machines/borrow_state`, data, { headers: headers })
+            axios.post(`${apiConf.URL || "" }/api/machines/borrow_state`, data, { headers: headers })
                 .then(res => {
                     console.log("🚀 ~ file: machine.js:30 ~ handleBorrowTime ~ res:", res);
                     window.location.href = "/home/state";
