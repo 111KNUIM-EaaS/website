@@ -6,20 +6,51 @@ import { onAuthStateChanged } from "firebase/auth";
 import Menu from "./menu";
 import UserLogin from "../page1/login/compose/userLogin";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import axios from "axios";
+import apiConf from '../conf/apiConf.json';
 
 let icons =  [
     {id: "QuestionCircle",  svg: <QuestionCircle size={30}/>,   href: "https://github.com/orgs/111KNUIM-EaaS/"},
     {id: "Grid3x3GapFill",  svg: <Grid3x3GapFill size={30}/>,   href: "/home/main"},
     {id: "Github",          svg: <Github size={30} />,          href: "https://github.com/orgs/111KNUIM-EaaS/"}
-]
+];
 
 function Header() {    
     const [user, setUser] = useState(null);
 
     useEffect(() => {
         onAuthStateChanged(authentication, (user) => {
-            setUser(user);           
-            // console.log("🚀 ~ file: header.js:21 ~ onAuthStateChanged ~ user:", user);
+            setUser(user);
+
+            if( user !== null ) {
+                user.getIdToken().then((idToken) => {
+                    const data = {
+                        email: user.email,
+                        name: user.displayName,
+                    };
+
+                    const headers = {
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*',
+                        'User': user.uid,
+                        'Authorization': idToken
+                    };
+
+                    // console.log(`[L][${(new Date()).toLocaleString()}]📝 header.js[/api/users/google/login] 🔊 data:`, data, `headers:`, headers);
+
+                    axios.post(`${apiConf.URL || "" }/api/users/google/login`, data, { headers: headers })
+                        .then(res => {
+                            // console.log(`[L][${(new Date()).toLocaleString()}]📝 header.js[/api/users/google/login] 🔊 res data:`, res.data);
+                            if( window.location.pathname === "/" ) {
+                                window.location.href = "/home/main";
+                            }
+                        })
+                        .catch(err => {
+                            console.error(`[E][${(new Date()).toLocaleString()}]📝 header.js[/api/users/google/login] 🔊 res Error:`, err);
+                            // window.location.reload();
+                        });
+                });
+            }
 
             if( user === null && window.location.pathname !== "/") {
                 window.location.href = "/";

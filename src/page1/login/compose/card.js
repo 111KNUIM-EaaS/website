@@ -1,21 +1,9 @@
-import { useState, useEffect } from 'react';
 import { Card, Button, Row, Col, Container } from 'react-bootstrap';
 import { Google } from 'react-bootstrap-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { signInWithGoogle,  authentication } from '../../../compose/firebase';
-import { onAuthStateChanged } from "firebase/auth";
+import { signInWithGoogle } from '../../../compose/firebase';
 
 function LoginCard() {
-    const [isClick, setIsClick] = useState(false);
-
-    useEffect(() => {
-        onAuthStateChanged(authentication, (user) => {
-            if(!isClick && user !== null) {
-                window.location.href = "/home/main";
-            }
-        });
-    }, [isClick]);
-
     return (
         <Card className="mx-4" style={{ width: '40vw' }}>
             <Card.Body>
@@ -36,7 +24,7 @@ function LoginCard() {
                         <hr></hr>
                         <h4>請使用 Google 帳號登入</h4>
                         <div className="d-grid gap-2">
-                            <Button className='mt-2' size="lg" variant="outline-primary" onClick={() => {signInWithGoogle(); setIsClick(true);}}><Google size={30}></Google>&emsp;google 登錄</Button> 
+                            <Button className='mt-2' size="lg" variant="outline-primary" onClick={() => {signInWithGoogle();}}><Google size={30}></Google>&emsp;google 登錄</Button> 
                         </div>
                     </Row>
                 </Container>
