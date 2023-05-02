@@ -94,7 +94,7 @@ const State = () => {
                                 </Card.Header>
                                 <Card.Body>
                                     <div>種類：{state.machine.type}</div>
-                                    <div>狀態：{(state.machine.status === 0)? "離線" : (state.machine.status === 1)? "啟動" : (state.machine.status === 2)? "運行中" : (state.machine.status === 3)? "暫停中" : (state.machine.status === 4)? "暫停" : "" }</div>
+                                    <div>狀態：{(state.machine.status === 0)? "離線" : (state.machine.status === 1)? "啟動" : (state.machine.status === 2)? "運行中" : (state.machine.status === 3)? "暫停中" : (state.machine.status === 4)? "暫停" : (state.machine.status === 5)? "更新中" : "閒置" }</div>
                                     <div>價格：{state.machine.price} 元/小時</div>
                                     <div>Github: <a href={`https://github.com/${state.github.owner}/${state.github.repo}`}>{state.github.owner}/{state.github.repo}</a></div>
                                     <hr />
